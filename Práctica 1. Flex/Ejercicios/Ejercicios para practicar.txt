@@ -1,0 +1,38 @@
+0.- Programa que muestre los URLs de un archivo html.
+
+1.- Hacer un programa que cuente el número de líneas con menos de:
+	a) 30 caracteres
+	b) 30 letras
+
+2.- Hacer un programa que cuente el número de líneas en blanco.
+
+3.- Hacer un programa que cuente el número de espacios y tabuladores.
+
+4.- Construir un filtro que transforme todas las letras mayúsculas en minúsculas.
+
+5.- Construir un filtro que codifique el texto de un fichero usando el cifrado “César”. 
+
+6.- Un filtro que liste las “palabras” que encabezan y finalizan las líneas
+
+7.- Un filtro que añada el número de línea
+
+8.- Programa que cuente los números en formato punto flotante que aparecen en un fichero cuyo nombre se le pasa como argumento.
+
+9.- Filtro que elimine comentarios scripts (desde # hasta fin de línea)
+
+10.- Filtro que elimine líneas con más de tres tabuladores salvo que se encuentren consecutivos en cuyo caso simplemente los sustituya por un blanco
+
+11.- Construir un programa que toma como argumento un nombre de fichero y muestra su contenido por pantalla anteponiendo a cada línea su número, también debe poder utilizarse como un filtro (como cat –n).
+
+12.- Construir un programa que como cat –v permita mostrar de algún modo los caracteres no imprimibles, por ejemplo mostrando su número ASCII entre ángulos.
+
+13.- Construir un programa al que se le pasa como argumento el nombre de un fichero. En el fichero entre van a aparecer números en distintas bases. La base en la que deben interpretarse los números se indica al final de estos, pudiendo utilizarse varios métodos tal como se indica a continuación:
+	1011b	1011B	1011(2)	para números en binario
+	172o	172O	172(8)	para números en octal
+	987d	987D	987(10)	para números en decimal
+	6A0fCx	6A0fCX	6A0fC(16)	para números en hexadecimal
+el programa ha de presentarlos en decimal y sin el indicador de base.
+
+14.- Escribir un filtro que aplicado a la hora que devuelve el programa date, nos de los buenos días (7 a 15), las buenas tardes (15 a 20) o las buenas noches. Además nos ha de dar la hora en formato texto tal como se muestra en el ejemplo.
+	date | DEMO
+	Buenas tardes, son las tres y cuarto.

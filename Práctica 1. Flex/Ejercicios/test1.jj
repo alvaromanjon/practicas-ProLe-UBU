@@ -1,0 +1,55 @@
+options {
+BUILD_TOKEN_MANAGER=true;
+COMMON_TOKEN_ACTION=false;
+}
+
+PARSER_BEGIN(test)
+
+public class test {
+
+    public static void main(String args[]) throws ParseException {
+	testTokenManager tkmngr = new testTokenManager( new SimpleCharStream(System.in) );
+	Token tk;
+
+	System.out.print("Enter Expression: ");
+	System.out.flush();
+	
+	try {
+        	while ( (tk = tkmngr.getNextToken()).kind != EOF ) 
+        	   if ( tk.kind == EOL ) System.out.println("  <<< lf >>>");
+        	   else System.out.println("  <<<"+tk.image+">>>");
+	} catch (TokenMgrError x) {
+		System.out.println("Exiting.");
+		throw x;
+	}
+    }
+}
+PARSER_END(test)
+
+SKIP :
+{
+ 	" " {System.out.print("<sp>");System.out.flush();}
+|	"\r" {System.out.print("<cr>");System.out.flush();}
+|	"\t" {System.out.print("<tab>");System.out.flush();}
+}
+
+TOKEN :
+{
+	< EOL: "\n" > {System.out.print("<lf>");System.out.flush();}
+}
+
+TOKEN : /* OPERATORS */
+{
+	< PLUS: "+" > {System.out.print("<+>");System.out.flush();}
+|	< MINUS: "-" > {System.out.print("<->");System.out.flush();}
+|	< MULTIPLY: "*" > {System.out.print("<*>");System.out.flush();}
+|	< DIVIDE: "/" > {System.out.print("</>");System.out.flush();}
+}
+
+TOKEN :
+{
+    < TINY_CONSTANT: ( <DIGIT> ){1,3} > {System.out.print("<t_const,"+image+">");System.out.flush();}
+|    < BIG_CONSTANT: ( <DIGIT> ){1,10} > {System.out.print("<b_const,"+image+">");System.out.flush();}
+|   < #DIGIT: ["0" - "9"] > 
+|   < OTRO: ~[]> {System.out.println("."); System.out.flush(); } 
+}
