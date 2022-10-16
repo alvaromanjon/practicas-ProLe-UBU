@@ -1,0 +1,49 @@
+Enunciado provisional de la primera práctica.
+
+Usando flex crear un programa para procesar un documento XML 
+realizando las operaciones necesarias para que al finalizar el 
+procesado permita mostrar las siguientes estadísticas:
+- el número de comentarios.
+- el número de elementos vacíos (finalizan sin tener etiquetas 
+  anidadas ni texto en su interior).
+- el nombre de la etiqueta que contiene más atributos y su número.
+- el espacio de nombres con valor más largo y su prefijo asociado, 
+  si es que lo tiene.
+
+El contenido de las secciones CDATA se deben ignorar para todas 
+las estadísticas.
+
+------------------------------------------------------------------
+
+Ante una entrada como la siguiente.
+
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<!DOCTYPE eje PUBLIC "-//cgosorio//DTD eje//ES" 
+                        "http://www.ubu.es/DTD/eje.dtd" >
+<!-- lo de arriba lo procesa sin contar -->
+
+<eje>
+  <etiq1 atr1="v1" atr2='val2' atr3="val3">
+  texto y mas texto
+  </etiq1> <!-- una etiqueta de cierre-->
+  y mira que bueno, incluso mas texto
+
+  <!-- esto es un comentario -->
+  <etiqueta2/><!-- un elemento vacío -->
+
+  <!-- esto lo voy a contar como una de inicio y una de cierre -->
+  <ns1:etiq2 xmlns:ns1="http://pisuerga.inf.ubu.es/" at2="val2" at3="val3"></ns1:etiq2>
+
+  <![CDATA[
+  <etiq2 > <!-- esta etiqueta y este comentario no los voy a contar
+                por estar dentro de una sección CDATA -->
+  ]]>
+</eje>
+
+Debería dar:
+- Comentarios: 5
+- Elementos vacios: 2
+- La etiqueta "etiq1" es la que más atributos tiene en su interior: 3.
+- El valor más largo de espacio de nombres es "http://pisuerga.inf.ubu.es/" 
+  y el prefijo asociado es "ns1".
+
