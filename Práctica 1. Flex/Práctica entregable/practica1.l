@@ -5,12 +5,10 @@
 #include <stdbool.h>
 #include <string.h>
 // Funciones
-
-
-// Variables
-int numComentarios = 0;
 %}
 
+ // Variables
+ int numComentarios = 0;
 
 %x COMENTARIOS
 %%
@@ -20,6 +18,7 @@ int numComentarios = 0;
                         BEGIN(0);
                     }
 
+.					{;}
 
 
 %%
