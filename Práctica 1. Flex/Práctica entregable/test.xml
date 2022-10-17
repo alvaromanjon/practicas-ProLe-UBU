@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<!DOCTYPE eje PUBLIC "-//cgosorio//DTD eje//ES" 
+                        "http://www.ubu.es/DTD/eje.dtd" >
+<!-- lo de arriba lo procesa sin contar -->
+
+<eje>
+  <etiq1 atr1="v1" atr2='val2' atr3="val3">
+  texto y mas texto
+  </etiq1> <!-- una etiqueta de cierre-->
+  y mira que bueno, incluso mas texto
+
+  <!-- esto es un comentario -->
+  <etiqueta2/><!-- un elemento vacío -->
+
+  <!-- esto lo voy a contar como una de inicio y una de cierre -->
+  <ns1:etiq2 xmlns:ns1="http://pisuerga.inf.ubu.es/" at2="val2" at3="val3"></ns1:etiq2>
+
+  <![CDATA[
+  <etiq2 > <!-- esta etiqueta y este comentario no los voy a contar
+                por estar dentro de una sección CDATA -->
+  ]]>
+</eje>
