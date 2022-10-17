@@ -82,5 +82,9 @@ $RECYCLE.BIN/
 *.mov
 *.avi
 
+# Flex
+*.out
+*.yy.c
+
 # End of https://www.toptal.com/developers/gitignore/api/windows,linux,macOS
 
