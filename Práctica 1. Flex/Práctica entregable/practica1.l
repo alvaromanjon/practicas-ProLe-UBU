@@ -8,13 +8,17 @@
 %}
 
  // Variables
- int numComentarios = 0;
+ int numComentarios = 0, etiqueta = 0, numAtributos = 0;
 
-%x COMENTARIOS CDATA
+%x COMENTARIOS CDATA ETIQUETA
 %%
 
 \<\!\[CDATA\[		BEGIN(CDATA);
 \]\]\>				BEGIN(0);
+
+\<[a-zA-Z0-9]+		{BEGIN(ETIQUETA); 
+[a-zA-Z0-9]+\=		{numAtributos;}
+\>					{etiqueta++; BEGIN(0);}
 
 \<\!\-\-            BEGIN(COMENTARIOS);
 <COMENTARIOS>\-\-\> {numComentarios++;
