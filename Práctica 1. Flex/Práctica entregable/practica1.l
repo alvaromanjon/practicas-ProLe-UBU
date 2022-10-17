@@ -10,8 +10,11 @@
  // Variables
  int numComentarios = 0;
 
-%x COMENTARIOS
+%x COMENTARIOS CDATA
 %%
+
+\<\!\[CDATA\[		BEGIN(CDATA);
+\]\]\>				BEGIN(0);
 
 \<\!\-\-            BEGIN(COMENTARIOS);
 <COMENTARIOS>\-\-\> {numComentarios++;
