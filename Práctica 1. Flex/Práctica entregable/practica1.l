@@ -1,29 +1,40 @@
 %{
-/*Practica 1
-*Autores:Maria Alonso y Alvaro Manjon
-*/
+/* Practica 1
+ * Autores:Maria Alonso y Alvaro Manjon
+ */
 #include <stdbool.h>
 #include <string.h>
-// Funciones
 %}
-
+ #define CP(from,to) free(to);to=strdup(from)
+ // Funciones
+ 
  // Variables
- int numComentarios = 0;
+ int numComentarios = 0, numAtributos = 0;
+ char *etiqueta;
 
-%x COMENTARIOS CDATA
+name [a-zA-Z|\_][a-zA-Z0-9\_\-\.]*
+equal \s*\=\s*
+val \'|\"{name}\'|\"
+
+%x PI CDATA COM STAG ATTR
 %%
 
-"<![CDATA["			BEGIN(CDATA);
-"]]>"				BEGIN(INITIAL);
-
-"<!--"            	BEGIN(COMENTARIOS);
-<COMENTARIOS>"-->" 	{numComentarios++; BEGIN(INITIAL);}
+"<![CDATA["					BEGIN(CDATA);
+"]]>"						BEGIN(INITIAL);
+"<?"						BEGIN(PI);
+<PI>"?>"					BEGIN(INITIAL);
+"<!--"            			BEGIN(COM);
+<COM>"-->" 					{numComentarios++; BEGIN(INITIAL); }
+"<"							BEGIN(STAG);
+<STAG>^{name}				{CP(yytext, etiqueta); BEGIN(ATTR); }
+<ATTR>{name}{equal}{val}	{numAtributos++; }
 
 <*>.|\n				;
 
 
 %%
 
+//TODO comprobar si hay que cambiar el main o no
 int main(int argc, char **argv) {
 
 	if (argc > 1) {
