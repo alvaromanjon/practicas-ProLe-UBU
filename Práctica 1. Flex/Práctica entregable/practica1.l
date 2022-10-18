@@ -8,22 +8,16 @@
 %}
 
  // Variables
- int numComentarios = 0, etiqueta = 0, numAtributos = 0;
+ int numComentarios = 0;
 
-%x COMENTARIOS CDATA ETIQUETA
+%x COMENTARIOS CDATA
 %%
 
-\<\!\[CDATA\[		BEGIN(CDATA);
-\]\]\>				BEGIN(0);
+"<![CDATA["			BEGIN(CDATA);
+"]]>"				BEGIN(INITIAL);
 
-\<[a-zA-Z0-9]+		{BEGIN(ETIQUETA); 
-[a-zA-Z0-9]+\=		{numAtributos;}
-\>					{etiqueta++; BEGIN(0);}
-
-\<\!\-\-            BEGIN(COMENTARIOS);
-<COMENTARIOS>\-\-\> {numComentarios++;
-                        BEGIN(0);
-                    }
+"<!--"            	BEGIN(COMENTARIOS);
+<COMENTARIOS>"-->" 	{numComentarios++; BEGIN(INITIAL);}
 
 <*>.|\n				;
 
@@ -48,10 +42,10 @@ int main(int argc, char **argv) {
 	}
 
     yylex();
-    printf("-Comentarios: %d.\n", numComentarios);  
-    printf("-Elementos vacios: ");
-    printf("- La etiqueta " " es la que mas atributos tiene en su interior: ");
-    printf("- El valor mas largo de espacio de nombres es " " y el prefijo asociado es " "");
+    printf("- Comentarios: %d.\n", numComentarios);  
+    printf("- Elementos vacios: \n");
+    printf("- La etiqueta " " es la que mas atributos tiene en su interior: \n");
+    printf("- El valor mas largo de espacio de nombres es " " y el prefijo asociado es " "\n");
 
     return 0;
 }
