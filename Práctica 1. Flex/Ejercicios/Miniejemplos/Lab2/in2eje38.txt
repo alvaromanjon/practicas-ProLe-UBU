@@ -1,0 +1,7 @@
+Un entero: 34
+Otro entero: 349
+Un decimal: .567
+Otro decimal: -45.09
+Un flotante: -.34e-45
+El segundo flotante: 34.03E12
+El tercer flotante: -12.3e-3 
