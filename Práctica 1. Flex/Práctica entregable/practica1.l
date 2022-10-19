@@ -9,7 +9,7 @@
  // Funciones
  
  // Variables
- int numComentarios = 0, numAtributostmp = 0;
+ int numComentarios = 0, numAtributostmp = 0, elemVacios = 0;
  char *etiquetatmp;
 
 name [a-zA-Z|\_][a-zA-Z0-9\_\-\.]*
@@ -25,12 +25,16 @@ equal \s*=
 <PI>"?>"					BEGIN(INITIAL);
 "<!--"            			BEGIN(COM);
 <COM>"-->" 					{numComentarios++; BEGIN(INITIAL); }
+"</"						;
 "<"							BEGIN(STAG);
-<STAG>">"					BEGIN(INITIAL);
+<STAG>"!"					BEGIN(INITIAL);
 <STAG>{name}				{CP(yytext, etiquetatmp); BEGIN(ATTR); }
 <ATTR>{name}{equal}			{numAtributostmp++; }
-
-<*>.|\n				;
+<ATTR>"/>"					{elemVacios++; BEGIN(INITIAL); }
+<ATTR>">"					{yymore(); BEGIN(STAG); }
+<STAG>"><"					{elemVacios++; BEGIN(INITIAL); }
+<STAG>\>?\n					BEGIN(INITIAL); //TODO mejorar esta regla
+<*>.|\n						;
 
 
 %%
@@ -54,9 +58,9 @@ int main(int argc, char **argv) {
 	}
 
     yylex();
-	printf("- DEBUG: Atributos totales: %d\n", numAtributostmp);
+	printf("- DEBUG: Atributos totales: %d.\n", numAtributostmp);
     printf("- Comentarios: %d.\n", numComentarios);  
-    printf("- Elementos vacios: \n");
+    printf("- Elementos vacios: %d.\n", elemVacios);
     printf("- La etiqueta " " es la que mas atributos tiene en su interior: \n");
     printf("- El valor mas largo de espacio de nombres es " " y el prefijo asociado es " "\n");
 
