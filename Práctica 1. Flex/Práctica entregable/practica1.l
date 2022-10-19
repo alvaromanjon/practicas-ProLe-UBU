@@ -68,15 +68,18 @@ int main(int argc, char **argv) {
     printf("- Elementos vacios: %d\n", elemVacios);
     printf("- La etiqueta \"%s\" es la que mas atributos tiene en su interior: %d.\n", etiquetamax, numAtributosMax);
     printf("- El valor mas largo de espacio de nombres es \"%s\" y el prefijo asociado es \"%s\".\n", nsurlmax, nsmax);
-    return 0;
+    return 0;+
 }
-/*
-void MayorNumAtributos(){
-	if(int i = 0; i < ; i++){
-		if ( > ){
-			
-		}
-
+void mayorNumAtributos(int * numTmp, int * numMax, char * strTmp, char * srtMax){
+	if(*numTmp > *numMax){
+		*numMax = *numTmp;
+		CP(*strTmp, *srtMax);
+	} else {
+		*numTmp = 0;
 	}
+	
 }
-*/
+
+void nombreMasLargo(){
+
+}
