@@ -14,13 +14,15 @@
 
 name [a-zA-Z|\_][a-zA-Z0-9\_\-\.]*
 equal \s*=
+cdata \<\!\[CDATA\[
+emptytag "<"
  //val (\'|\")[^']*(\'|\")
 
 %x PI CDATA COM STAG ATTR XMLNS XMLNSU
 %%
 
-"<![CDATA["					BEGIN(CDATA);
-"]]>"						BEGIN(INITIAL);
+{cdata}						BEGIN(CDATA);
+<CDATA>"]]>"				BEGIN(INITIAL);
 "<?"						BEGIN(PI);
 <PI>"?>"					BEGIN(INITIAL);
 "<!--"            			BEGIN(COM);
@@ -29,14 +31,12 @@ equal \s*=
 "<"							BEGIN(STAG);
 <STAG>"!"					BEGIN(INITIAL);
 <STAG>{name}":"				BEGIN(XMLNS);
-<XMLNS>{name}				CP(yytext, etiquetatmp);
-<XMLNS>"http:\/\/"			{yymore; BEGIN(XMLNSU); }
-<XMLNS>[^""]				{CP(yytext, nstmp); BEGIN(ATTR); }
+<XMLNS>{name}				{CP(yytext, etiquetatmp); BEGIN(ATTR); }
 <STAG>{name}				{CP(yytext, etiquetatmp); BEGIN(ATTR); }
 <ATTR>{name}{equal}			{numAtributostmp++; }
 <ATTR>"/>"					{elemVacios++; BEGIN(INITIAL); }
 <ATTR>">"					{yymore(); BEGIN(STAG); }
-<STAG>"><"					{elemVacios++; BEGIN(INITIAL); }
+<STAG>{emptytag}			{elemVacios++; BEGIN(INITIAL); }
 <STAG>\>?\n					BEGIN(INITIAL); //TODO mejorar esta regla
 <*>.|\n						;
 
