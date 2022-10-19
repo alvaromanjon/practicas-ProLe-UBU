@@ -49,8 +49,9 @@ cdata \<\!\[CDATA\[
 %%
 
 int main(int argc, char **argv) {
-
+// pasamos un unico argumento
 	if(argc > 1) {
+		// abrimos y leemos el archivo 
         if(!(yyin = fopen(argv[1], "r"))) {
             perror(argv[1]); // Informa del error
             return (1);
