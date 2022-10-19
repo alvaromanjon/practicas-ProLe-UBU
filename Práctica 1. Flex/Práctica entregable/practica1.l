@@ -7,6 +7,7 @@
 %}
  #define CP(from,to) free(to);to=strdup(from)
  // Funciones
+ void MayorNumAtributos();
  
  // Variables
  int numComentarios = 0, numAtributostmp = 0, elemVacios = 0;
@@ -69,4 +70,13 @@ int main(int argc, char **argv) {
     printf("- El valor mas largo de espacio de nombres es " " y el prefijo asociado es " "\n");
 
     return 0;
+}
+
+void MayorNumAtributos(){
+	if(int i = 0; i < ; i++){
+		if ( > ){
+			
+		}
+
+	}
 }
