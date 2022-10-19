@@ -9,12 +9,12 @@
  // Funciones
  
  // Variables
- int numComentarios = 0, numAtributos = 0;
- char *etiqueta;
+ int numComentarios = 0, numAtributostmp = 0;
+ char *etiquetatmp;
 
 name [a-zA-Z|\_][a-zA-Z0-9\_\-\.]*
-equal \s*\=\s*
-val \'|\"{name}\'|\"
+equal \s*=
+//val (\'|\")[^']*(\'|\")
 
 %x PI CDATA COM STAG ATTR
 %%
@@ -26,8 +26,8 @@ val \'|\"{name}\'|\"
 "<!--"            			BEGIN(COM);
 <COM>"-->" 					{numComentarios++; BEGIN(INITIAL); }
 "<"							BEGIN(STAG);
-<STAG>^{name}				{CP(yytext, etiqueta); BEGIN(ATTR); }
-<ATTR>{name}{equal}{val}	{numAtributos++; }
+<STAG>^{name}				{CP(yytext, etiquetatmp); BEGIN(ATTR); }
+<ATTR>{name}{equal}			{numAtributostmp++; }
 
 <*>.|\n				;
 
