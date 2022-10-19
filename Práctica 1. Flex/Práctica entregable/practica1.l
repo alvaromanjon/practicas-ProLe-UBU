@@ -10,13 +10,13 @@
  
  // Variables
  int numComentarios = 0, numAtributostmp = 0, elemVacios = 0;
- char *etiquetatmp;
+ char *etiquetatmp, *nstmp;
 
 name [a-zA-Z|\_][a-zA-Z0-9\_\-\.]*
 equal \s*=
  //val (\'|\")[^']*(\'|\")
 
-%x PI CDATA COM STAG ATTR
+%x PI CDATA COM STAG ATTR XMLNS XMLNSU
 %%
 
 "<![CDATA["					BEGIN(CDATA);
@@ -28,6 +28,10 @@ equal \s*=
 "</"						;
 "<"							BEGIN(STAG);
 <STAG>"!"					BEGIN(INITIAL);
+<STAG>{name}":"				BEGIN(XMLNS);
+<XMLNS>{name}				CP(yytext, etiquetatmp);
+<XMLNS>"http:\/\/"			{yymore; BEGIN(XMLNSU); }
+<XMLNS>[^""]				{CP(yytext, nstmp); BEGIN(ATTR); }
 <STAG>{name}				{CP(yytext, etiquetatmp); BEGIN(ATTR); }
 <ATTR>{name}{equal}			{numAtributostmp++; }
 <ATTR>"/>"					{elemVacios++; BEGIN(INITIAL); }
