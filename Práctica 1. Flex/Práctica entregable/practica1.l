@@ -1,49 +1,47 @@
 %{
 /* Practica 1
- * Autores:Maria Alonso y Alvaro Manjon
+ * Autores: Maria Alonso y Alvaro Manjon
  */
-#include <stdbool.h>
-#include <string.h>
 %}
  #define CP(from,to) free(to);to=strdup(from)
  // Funciones
  //void MayorNumAtributos();
  
  // Variables
- int numComentarios = 0, numAtributostmp = 0, elemVacios = 0;
- char *etiquetatmp, *nstmp, *nsurltmp;
+ int numComentarios = 0, numAtributostmp = 0, numAtributosMax = 0, elemVacios = 0;
+ char *etiquetatmp, *etiquetamax, *nstmp, *nsmax, *nsurltmp, *nsurlmax;
 
 name [a-zA-Z|\_][a-zA-Z0-9\_\-\.]*
 equal \s*=
 cdata \<\!\[CDATA\[
 
-%x PI CDATA COM STAG ATTR XMLNS XMLNSTAG XMLNSURL
+%x PI CDATA COM STAG STAGEXIT ATTR XMLNS XMLNSTAG XMLNSURL
 %%
 
-{cdata}						BEGIN(CDATA);
-<CDATA>"]]>"				BEGIN(INITIAL);
-"<?"						BEGIN(PI);
-<PI>"?>"					BEGIN(INITIAL);
-"<!--"            			BEGIN(COM);
-<COM>"-->" 					{numComentarios++; BEGIN(INITIAL); }
-"</"						; 
-"<"							BEGIN(STAG);
-<STAG>"!"					BEGIN(INITIAL);
-<STAG>{name}":"				{yyless(0); BEGIN(XMLNS); }
-<XMLNS>{name}				CP(yytext, nstmp);
-<XMLNS>":"{name}			{yyless(0); BEGIN(XMLNSTAG); }
-<XMLNSTAG>{name}":"{name}	;
-<XMLNSTAG>{name}			CP(yytext, etiquetatmp);
-<XMLNSTAG>{equal}			BEGIN(XMLNSURL);
-<XMLNSURL>[^"]*				{CP(yytext, nsurltmp); BEGIN(ATTR); }
-<STAG>{name}				{CP(yytext, etiquetatmp); BEGIN(ATTR); }
-<ATTR>{name}{equal}			{numAtributostmp++; }
-<ATTR>"/>"					{elemVacios++; BEGIN(INITIAL); }
-<ATTR>">"					{yymore(); BEGIN(STAG); }
-<STAG>"<"					{elemVacios++; BEGIN(INITIAL); }
-<STAG>[\n\s]*				BEGIN(INITIAL);
+{cdata}						BEGIN(CDATA); 
+<CDATA>"]]>"				BEGIN(INITIAL); 
+"<?"						BEGIN(PI); 
+<PI>"?>"					BEGIN(INITIAL); 
+"<!--"            			BEGIN(COM); 
+<COM>"-->" 					{numComentarios++; BEGIN(INITIAL); } 
+"</"						;  
+"<"							BEGIN(STAG); 
+<STAG>"!"					BEGIN(INITIAL); 
+<STAG>{name}":"				{yyless(0); BEGIN(XMLNS); } 
+<XMLNS>{name}				CP(yytext, nstmp); 
+<XMLNS>":"{name}			{yyless(0); BEGIN(XMLNSTAG); } 
+<XMLNSTAG>{name}":"{name}	; 
+<XMLNSTAG>{name}			CP(yytext, etiquetatmp); 
+<XMLNSTAG>{equal}			BEGIN(XMLNSURL); 
+<XMLNSURL>[^"]*				{CP(yytext, nsurltmp); BEGIN(ATTR); } 
+<STAG>{name}				{CP(yytext, etiquetatmp); BEGIN(ATTR); } 
+<ATTR>{name}{equal}			{numAtributostmp++; } 
+<ATTR>"/>"					{elemVacios++; BEGIN(INITIAL); } 
+<ATTR>">"					{BEGIN(STAGEXIT); } 
+<STAGEXIT>"<"				{yyless(0); BEGIN(INITIAL);  } 
+<STAGEXIT>{name}			BEGIN(INITIAL);
+<STAGEXIT>"</"				{elemVacios++; BEGIN(INITIAL); } 
 <*>.|\n						;
-
 
 %%
 
@@ -68,9 +66,8 @@ int main(int argc, char **argv) {
     yylex();
     printf("- Comentarios: %d\n", numComentarios);  
     printf("- Elementos vacios: %d\n", elemVacios);
-    printf("- La etiqueta " " es la que mas atributos tiene en su interior: \n");
-    printf("- El valor mas largo de espacio de nombres es " " y el prefijo asociado es " "\n");
-
+    printf("- La etiqueta \"%s\" es la que mas atributos tiene en su interior: %d.\n", etiquetamax, numAtributosMax);
+    printf("- El valor mas largo de espacio de nombres es \"%s\" y el prefijo asociado es \"%s\".\n", nsurlmax, nsmax);
     return 0;
 }
 /*
