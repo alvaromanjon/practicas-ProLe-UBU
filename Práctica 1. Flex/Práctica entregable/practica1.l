@@ -26,7 +26,8 @@ equal \s*=
 "<!--"            			BEGIN(COM);
 <COM>"-->" 					{numComentarios++; BEGIN(INITIAL); }
 "<"							BEGIN(STAG);
-<STAG>^{name}				{CP(yytext, etiquetatmp); BEGIN(ATTR); }
+<STAG>">"					BEGIN(INITIAL);
+<STAG>{name}				{CP(yytext, etiquetatmp); BEGIN(ATTR); }
 <ATTR>{name}{equal}			{numAtributostmp++; }
 
 <*>.|\n				;
@@ -53,6 +54,7 @@ int main(int argc, char **argv) {
 	}
 
     yylex();
+	printf("- DEBUG: Atributos totales: %d\n", numAtributostmp);
     printf("- Comentarios: %d.\n", numComentarios);  
     printf("- Elementos vacios: \n");
     printf("- La etiqueta " " es la que mas atributos tiene en su interior: \n");
