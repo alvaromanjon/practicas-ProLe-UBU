@@ -11,13 +11,13 @@
  
  // Variables
  int numComentarios = 0, numAtributostmp = 0, elemVacios = 0;
- char *etiquetatmp, *nstmp;
+ char *etiquetatmp, *nstmp, *nsurltmp;
 
 name [a-zA-Z|\_][a-zA-Z0-9\_\-\.]*
 equal \s*=
 cdata \<\!\[CDATA\[
 
-%x PI CDATA COM STAG ATTR XMLNS XMLNSU
+%x PI CDATA COM STAG ATTR XMLNS XMLNSTAG XMLNSURL
 %%
 
 {cdata}						BEGIN(CDATA);
@@ -29,8 +29,14 @@ cdata \<\!\[CDATA\[
 "</"						; 
 "<"							BEGIN(STAG);
 <STAG>"!"					BEGIN(INITIAL);
-<STAG>{name}":"				BEGIN(XMLNS);
-<STAG,XMLNS>{name}			{CP(yytext, etiquetatmp); BEGIN(ATTR); }
+<STAG>{name}":"				{yyless(0); BEGIN(XMLNS); }
+<XMLNS>{name}				CP(yytext, nstmp);
+<XMLNS>":"{name}			{yyless(0); BEGIN(XMLNSTAG); }
+<XMLNSTAG>{name}":"{name}	;
+<XMLNSTAG>{name}			CP(yytext, etiquetatmp);
+<XMLNSTAG>{equal}			BEGIN(XMLNSURL);
+<XMLNSURL>[^"]*				{CP(yytext, nsurltmp); BEGIN(ATTR); }
+<STAG>{name}				{CP(yytext, etiquetatmp); BEGIN(ATTR); }
 <ATTR>{name}{equal}			{numAtributostmp++; }
 <ATTR>"/>"					{elemVacios++; BEGIN(INITIAL); }
 <ATTR>">"					{yymore(); BEGIN(STAG); }
