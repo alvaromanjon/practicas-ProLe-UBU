@@ -14,7 +14,7 @@
 
 name [a-zA-Z|\_][a-zA-Z0-9\_\-\.]*
 equal \s*=
-//val (\'|\")[^']*(\'|\")
+ //val (\'|\")[^']*(\'|\")
 
 %x PI CDATA COM STAG ATTR
 %%
