@@ -2,10 +2,12 @@
 /* Practica 1
  * Autores: Maria Alonso y Alvaro Manjon
  */
+ #include <string.h>
 %}
  #define CP(from,to) free(to);to=strdup(from)
  // Funciones
- //void MayorNumAtributos();
+ void mayorNumAtributos();
+ void mayorNs();
  
  // Variables
  int numComentarios = 0, numAtributostmp = 0, numAtributosMax = 0, elemVacios = 0;
@@ -33,11 +35,11 @@ cdata \<\!\[CDATA\[
 <XMLNSTAG>{name}":"{name}	; 
 <XMLNSTAG>{name}			CP(yytext, etiquetatmp); 
 <XMLNSTAG>{equal}			BEGIN(XMLNSURL); 
-<XMLNSURL>[^"]*				{CP(yytext, nsurltmp); BEGIN(ATTR); } 
+<XMLNSURL>[^"]*				{CP(yytext, nsurltmp); mayorNs(); BEGIN(ATTR); } 
 <STAG>{name}				{CP(yytext, etiquetatmp); BEGIN(ATTR); } 
 <ATTR>{name}{equal}			{numAtributostmp++; } 
-<ATTR>"/>"					{elemVacios++; BEGIN(INITIAL); } 
-<ATTR>">"					{BEGIN(STAGEXIT); } 
+<ATTR>"/>"					{elemVacios++; mayorNumAtributos(); BEGIN(INITIAL); } 
+<ATTR>">"					{mayorNumAtributos(); BEGIN(STAGEXIT); } 
 <STAGEXIT>"<"				{yyless(0); BEGIN(INITIAL);  } 
 <STAGEXIT>{name}			BEGIN(INITIAL);
 <STAGEXIT>"</"				{elemVacios++; BEGIN(INITIAL); } 
@@ -63,23 +65,28 @@ int main(int argc, char **argv) {
 		yyin = stdin;
 	}
 
+	CP("", nsurlmax);
+
     yylex();
     printf("- Comentarios: %d\n", numComentarios);  
     printf("- Elementos vacios: %d\n", elemVacios);
     printf("- La etiqueta \"%s\" es la que mas atributos tiene en su interior: %d.\n", etiquetamax, numAtributosMax);
     printf("- El valor mas largo de espacio de nombres es \"%s\" y el prefijo asociado es \"%s\".\n", nsurlmax, nsmax);
-    return 0;+
+    return 0;
 }
-void mayorNumAtributos(int * numTmp, int * numMax, char * strTmp, char * srtMax){
-	if(*numTmp > *numMax){
-		*numMax = *numTmp;
-		CP(*strTmp, *srtMax);
+
+void mayorNumAtributos() {
+	if (numAtributostmp > numAtributosMax) {
+		numAtributosMax = numAtributostmp;
+		CP(etiquetatmp, etiquetamax);
 	} else {
-		*numTmp = 0;
+		numAtributostmp = 0;
 	}
-	
 }
 
-void nombreMasLargo(){
-
+void mayorNs() {
+	if (strlen(nsurltmp) > strlen(nsurlmax)) {
+		CP(nsurltmp, nsurlmax);
+		CP(nstmp, nsmax);
+	}
 }
