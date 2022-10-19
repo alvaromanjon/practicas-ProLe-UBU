@@ -4,6 +4,7 @@
  */
  #include <string.h>
 %}
+ // copia y libera memoria
  #define CP(from,to) free(to);to=strdup(from)
  // Funciones
  void mayorNumAtributos();
@@ -19,7 +20,7 @@ cdata \<\!\[CDATA\[
 
 %x PI CDATA COM STAG STAGEXIT ATTR XMLNS XMLNSTAG XMLNSURL
 %%
-
+	// definicion de reglas
 {cdata}						BEGIN(CDATA); 
 <CDATA>"]]>"				BEGIN(INITIAL); 
 "<?"						BEGIN(PI); 
@@ -60,6 +61,7 @@ int main(int argc, char **argv) {
 
     yylex();
 	
+	// imprime los resultados
     printf("- Comentarios: %d\n", numComentarios);  
     printf("- Elementos vacios: %d\n", elemVacios);
     printf("- La etiqueta \"%s\" es la que mas atributos tiene en su interior: %d.\n", etiquetamax, numAtributosMax);
@@ -67,6 +69,7 @@ int main(int argc, char **argv) {
     return 0;
 }
 
+// comprueba cual es la etiqueta con mayor numero de atributos
 void mayorNumAtributos() {
 	if (numAtributostmp > numAtributosMax) {
 		numAtributosMax = numAtributostmp;
@@ -76,6 +79,7 @@ void mayorNumAtributos() {
 	}
 }
 
+//Indica cual es el espacio de nombres mas largo
 void mayorNs() {
 	if (strlen(nsurltmp) > strlen(nsurlmax)) {
 		CP(nsurltmp, nsurlmax);
