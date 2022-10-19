@@ -4,8 +4,9 @@
  */
  #include <string.h>
 %}
- // copia y libera memoria
+ // Copia y libera memoria
  #define CP(from,to) free(to);to=strdup(from)
+
  // Funciones
  void mayorNumAtributos();
  void mayorNs();
@@ -14,13 +15,14 @@
  int numComentarios = 0, numAtributostmp = 0, numAtributosMax = 0, elemVacios = 0;
  char *etiquetatmp, *etiquetamax, *nstmp, *nsmax, *nsurltmp, *nsurlmax;
 
+elem [a-zA-Z0-9\_\-\.]+
 name [a-zA-Z|\_][a-zA-Z0-9\_\-\.]*
 equal \s*=
 cdata \<\!\[CDATA\[
 
 %x PI CDATA COM STAG STAGEXIT ATTR XMLNS XMLNSTAG XMLNSURL
 %%
-	// definicion de reglas
+ // Definicion de reglas
 {cdata}						BEGIN(CDATA); 
 <CDATA>"]]>"				BEGIN(INITIAL); 
 "<?"						BEGIN(PI); 
@@ -42,16 +44,16 @@ cdata \<\!\[CDATA\[
 <ATTR>"/>"					{elemVacios++; mayorNumAtributos(); BEGIN(INITIAL); } 
 <ATTR>">"					{mayorNumAtributos(); BEGIN(STAGEXIT); } 
 <STAGEXIT>"<"				{yyless(0); BEGIN(INITIAL);  } 
-<STAGEXIT>{name}			BEGIN(INITIAL);
+<STAGEXIT>{elem}			BEGIN(INITIAL);
 <STAGEXIT>"</"				{elemVacios++; BEGIN(INITIAL); } 
 <*>.|\n						;
 
 %%
 
 int main(int argc, char **argv) {
-// pasamos un unico argumento
+// Pasamos un unico argumento
 	if(argc > 1) {
-		// abrimos y leemos el archivo 
+		// Abrimos y leemos el archivo 
         if(!(yyin = fopen(argv[1], "r"))) {
             perror(argv[1]); // Informa del error
             return (1);
@@ -62,7 +64,7 @@ int main(int argc, char **argv) {
 
     yylex();
 	
-	// imprime los resultados
+	// Imprime los resultados
     printf("- Comentarios: %d\n", numComentarios);  
     printf("- Elementos vacios: %d\n", elemVacios);
     printf("- La etiqueta \"%s\" es la que mas atributos tiene en su interior: %d.\n", etiquetamax, numAtributosMax);
@@ -70,7 +72,7 @@ int main(int argc, char **argv) {
     return 0;
 }
 
-// comprueba cual es la etiqueta con mayor numero de atributos
+// Comprueba cual es la etiqueta con mayor numero de atributos
 void mayorNumAtributos() {
 	if (numAtributostmp > numAtributosMax) {
 		numAtributosMax = numAtributostmp;
