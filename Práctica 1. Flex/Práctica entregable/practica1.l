@@ -47,27 +47,19 @@ cdata \<\!\[CDATA\[
 
 %%
 
-//TODO comprobar si hay que cambiar el main o no
 int main(int argc, char **argv) {
 
-	if (argc > 1) {
-		FILE *file;
-		file = fopen(argv[1], "r");
-
-		if(!file) {
-			fprintf(stderr, "no se puede abrir %s\n", argv[1]);
-			exit(1);
-		}
-
-		yyin = file;
-	}
-	else {
-		yyin = stdin;
-	}
+	if(argc > 1) {
+        if(!(yyin = fopen(argv[1], "r"))) {
+            perror(argv[1]); // Informa del error
+            return (1);
+        }
+    }
 
 	CP("", nsurlmax);
 
     yylex();
+	
     printf("- Comentarios: %d\n", numComentarios);  
     printf("- Elementos vacios: %d\n", elemVacios);
     printf("- La etiqueta \"%s\" es la que mas atributos tiene en su interior: %d.\n", etiquetamax, numAtributosMax);
