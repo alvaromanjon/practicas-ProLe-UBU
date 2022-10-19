@@ -7,7 +7,7 @@
 %}
  #define CP(from,to) free(to);to=strdup(from)
  // Funciones
- void MayorNumAtributos();
+ //void MayorNumAtributos();
  
  // Variables
  int numComentarios = 0, numAtributostmp = 0, elemVacios = 0;
@@ -16,8 +16,6 @@
 name [a-zA-Z|\_][a-zA-Z0-9\_\-\.]*
 equal \s*=
 cdata \<\!\[CDATA\[
-emptytag "<"
- //val (\'|\")[^']*(\'|\")
 
 %x PI CDATA COM STAG ATTR XMLNS XMLNSU
 %%
@@ -28,17 +26,16 @@ emptytag "<"
 <PI>"?>"					BEGIN(INITIAL);
 "<!--"            			BEGIN(COM);
 <COM>"-->" 					{numComentarios++; BEGIN(INITIAL); }
-"</"						;
+"</"						; 
 "<"							BEGIN(STAG);
 <STAG>"!"					BEGIN(INITIAL);
 <STAG>{name}":"				BEGIN(XMLNS);
-<XMLNS>{name}				{CP(yytext, etiquetatmp); BEGIN(ATTR); }
-<STAG>{name}				{CP(yytext, etiquetatmp); BEGIN(ATTR); }
+<STAG,XMLNS>{name}			{CP(yytext, etiquetatmp); BEGIN(ATTR); }
 <ATTR>{name}{equal}			{numAtributostmp++; }
 <ATTR>"/>"					{elemVacios++; BEGIN(INITIAL); }
 <ATTR>">"					{yymore(); BEGIN(STAG); }
-<STAG>{emptytag}			{elemVacios++; BEGIN(INITIAL); }
-<STAG>\>?\n					BEGIN(INITIAL); //TODO mejorar esta regla
+<STAG>"<"					{elemVacios++; BEGIN(INITIAL); }
+<STAG>[\n\s]*				BEGIN(INITIAL);
 <*>.|\n						;
 
 
@@ -63,15 +60,14 @@ int main(int argc, char **argv) {
 	}
 
     yylex();
-	printf("- DEBUG: Atributos totales: %d.\n", numAtributostmp);
-    printf("- Comentarios: %d.\n", numComentarios);  
-    printf("- Elementos vacios: %d.\n", elemVacios);
+    printf("- Comentarios: %d\n", numComentarios);  
+    printf("- Elementos vacios: %d\n", elemVacios);
     printf("- La etiqueta " " es la que mas atributos tiene en su interior: \n");
     printf("- El valor mas largo de espacio de nombres es " " y el prefijo asociado es " "\n");
 
     return 0;
 }
-
+/*
 void MayorNumAtributos(){
 	if(int i = 0; i < ; i++){
 		if ( > ){
@@ -80,3 +76,4 @@ void MayorNumAtributos(){
 
 	}
 }
+*/
