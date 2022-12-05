@@ -1,0 +1,45 @@
+options {
+BUILD_TOKEN_MANAGER=true;
+COMMON_TOKEN_ACTION=false;
+STATIC=true;
+}
+
+PARSER_BEGIN(yyless)
+
+public class yyless {
+
+    public static void main(String args[]) throws ParseException {
+	yylessTokenManager tkmngr = new yylessTokenManager( new SimpleCharStream(System.in) );
+	Token tk;
+
+	System.out.print("? ");
+	System.out.flush();
+	
+	try {
+        	while ( (tk = tkmngr.getNextToken()).kind != EOF ) ;
+	} catch (TokenMgrError x) {
+		System.out.println("Exiting.");
+		throw x;
+	}
+    }
+}
+PARSER_END(yyless)
+
+TOKEN_MGR_DECLS:
+{
+  static void yyless(int n) { input_stream.backup(lengthOfMatch-n); }
+}
+
+SKIP :
+{
+ 	" " {System.out.print("<sp>");System.out.flush();}
+|	"\r" {System.out.print("<cr>");System.out.flush();}
+|	"\t" {System.out.print("<tab>");System.out.flush();}
+}
+
+TOKEN :
+{
+<TK1: "abcde"> { yyless(2); System.out.println("Found an 'abcde'"); }
+| <TK2: "cde"> { System.out.println("Found a 'cde'"); }
+| <TK3: ~[]> { System.out.println("Found a "+image); }
+}

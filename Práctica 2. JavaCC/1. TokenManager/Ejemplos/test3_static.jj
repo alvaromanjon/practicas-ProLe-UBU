@@ -1,0 +1,111 @@
+/* 
+ * AUTOR: César García Osorio.
+ * FECHA: 27/OCT/2012
+ *
+ * Este programa permite contar los comentarios al estilo C en un programa.
+ * Ilustra como se puede acceder desde el parser a las variables del 
+ * TokenManager cuando la funcionalidad de éste está en los métodos de clase
+ * estáticos. De este modo no es posible tener varias instancias del parser,
+ * pero la ejecución del analizador es más eficiente.
+ *
+ * La secuencia para probar su funcionamiento es:
+ * 		javacc ccommentsStatic.jj
+ * 		javac *.java
+ * 		java ccomments ccommentsStatic.jj
+ */
+
+options {
+   BUILD_TOKEN_MANAGER=true;
+   COMMON_TOKEN_ACTION=false;
+//   DEBUG_TOKEN_MANAGER=true;
+}
+
+PARSER_BEGIN(ccomments)
+
+public class ccomments {
+   public static void main(String args[]) throws java.io.FileNotFoundException 
+              // throws ParseException // this is only thrown in the parser
+   {
+      ccommentsTokenManager tkmngr;
+      if ( args.length < 1 ) {
+         tkmngr = new ccommentsTokenManager( new SimpleCharStream(System.in) );
+      } else {
+          tkmngr = new ccommentsTokenManager( 
+               new SimpleCharStream( new java.io.FileInputStream(args[0]),0,0 ) 
+              );
+      };
+
+      Token tk;
+      try {
+         while ( (tk = tkmngr.getNextToken()).kind != EOF )  ;
+         System.out.println("Número de comentarios multilínea:   "+
+                                ccommentsTokenManager.nMultComments);
+         System.out.println("Número de comentarios de una línea: "+
+                                ccommentsTokenManager.nLineComments);
+         System.out.println("Número de líneas de comentario:    "+
+                                ccommentsTokenManager.nCommentLines);
+      } catch (TokenMgrError x) {
+         System.out.println("Something wrong! Exiting.");
+         throw x;
+      };
+   }
+}
+PARSER_END(ccomments)
+
+
+TOKEN_MGR_DECLS:
+{
+   static int nLineComments=0;
+   static int nMultComments=0;
+   static int nCommentLines=0;
+}
+
+TOKEN :
+{
+ // Para tratar cadenas como "una /* cadena */ que no es //comentario"
+   < BCAD: "\"" > : CAD
+ | < BCOM1: "//" > : COM1
+ | < BCOM2: "/*" > : COM2
+ // Para evitar que constantes como '"' o '\"' se considere un inicio de cadena. 
+ | < CHAR: "'"(~[]|"\\"~[])"'" >
+}
+
+<CAD>TOKEN :
+{
+   < ECAD: "\""> : DEFAULT
+   // Caracteres escapados. Para tratar cosas como "cadena\"con comillas"
+ | < ESCCHAR: "\\"~[] >
+ | < RESTCAD: ~[] >
+   // Para el resto de tokenes que 'ignorar' más largos
+ | < REST2CAD: (~["\"","\\"])+ >
+}
+
+<COM1>TOKEN :
+{
+   < ECOM1: "\n"> { 
+      ccommentsTokenManager.nLineComments++; 
+      ccommentsTokenManager.nCommentLines++; 
+   } : DEFAULT
+ | < RESTCOM1: ~[] >
+ // Para el resto de tokenes que 'ignorar' más largos
+ | < REST2COM1: (~["\n"])+ >
+}
+
+<COM2>TOKEN :
+{
+   < ECOM2: "*/"> { 
+      ccommentsTokenManager.nMultComments++; 
+      ccommentsTokenManager.nCommentLines++; 
+   } : DEFAULT
+ | < NLCOM2: "\n" > {
+      ccommentsTokenManager.nCommentLines++; 
+   }
+ | < RESTCOM2: ~[] >
+ // Para el resto de tokenes que 'ignorar' más largos
+ | < REST2COM2: (~["*","/","\n"])+ >
+}
+
+SKIP :
+{
+  " " | "\t" | "\n" | "\r" | <~[]>
+}

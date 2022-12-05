@@ -1,0 +1,84 @@
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Equivalencias entre flex y JavaCC
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Compilación y ejecución:
+------------------------
+flex xxx.l --> lex.yy.c      javacc xxx.jj --> xxx.java
+                                               xxxTokenManager.java
+                                               xxxConstants.java
+                                               ...
+
+gcc lex.yy.c -lfl            javac *.java
+
+./a.out                      java xxx
+
+
+
+
+Expresiones regulares y definiciones:
+-------------------------------------
+
+Digit [0-9]             < Digit: ["a","A","0"-"9"] >
+
+a?                      ("a")?
+
+a+|b*                   ("a")+|("b")*
+
+b{1,2}                  ("b"){1,2}
+
+[^ab3-7]                ~["a","b","3"-"7"]
+
+.|\n                    ~[]
+
+
+
+
+Modo debugger:
+--------------
+
+flex -d ...             options={ DEBUG_TOKEN_MANAGER=true; }
+
+
+
+
+Acciones asociadas a expresiones regulares:
+-------------------------------------------
+
+e.r. ;                            SKIP:  { <e.r.> }
+
+e.r. { Acc1; Acc2; }              TOKEN: { <e.r.> { Acc1;Acc2; } }
+
+e.r. {... yymore(); }             MORE:  { <e.r.> }
+
+e.r. {...; BEGIN(X); }            TOKEN: { <e.r.> {...;} : X }
+
+e.r. {...; if (cond) BEGIN(X); }  TOKEN: { <e.r.> {...; if (cond) SwitchTo(X); } }
+
+
+
+
+Condiciones de arranque:
+------------------------
+
+%x COM CAD                        // No es necesario definir los estados en JavaCC
+
+<COM>e.r. { acc1; }               <COM>TOKEN: { <NOMBRE: e.r.> { acc1; } }
+
+<COM,CAD>e.r. { acc2; }           <COM,CAD>TOKEN: { <NOMBRE: e.r.> { acc2; } }
+
+<*>e.r. { acc3; }                 <*>TOKEN: { <NOMBRE: e.r.> { acc3; } }
+
+<INITIAL>e.r. { acc4; }           <DEFAULT>TOKEN: { <NOMBRE: e.r.> { acc4; } }
+
+
+
+
+Variables frecuentemente utilizadas:
+------------------------------------
+
+YY_START           curLexState
+yytext             image
+yyleng             lengthOfMatch
+yyin               inputStream
+

@@ -1,0 +1,59 @@
+
+PARSER_BEGIN (par2llaves)
+
+public class par2llaves {
+
+    public static void main (String[] args) throws Exception {
+	par2llaves parser = new par2llaves (System.in);
+	System.out.println (parser.parse ());
+    }
+
+}
+
+PARSER_END (par2llaves)
+
+/*
+ * The terminals
+ */
+
+SKIP : { "\n" | " " }
+
+TOKEN : {
+  <OPEN: "(">
+| <CLOSE: ")">
+| <PERIOD: ".">
+| < ID: (["a"-"z","A"-"Z"])+ >
+}
+
+/*
+ * The nonterminals
+ */
+
+String parse () : 
+{
+  String result;
+} 
+{
+  result = balanced () 
+  <PERIOD>
+  { return result + ";"; }
+}
+
+String balanced () : 
+{
+  StringBuffer result = new StringBuffer ();
+  String tmp;
+  Token tk;
+} 
+{
+  (
+    <OPEN> { result = result.append ("{"); }  
+     ( tk=<ID> { 
+          result = result.append (tk.image); 
+         }
+      )+
+    tmp = balanced () { result = result.append (tmp); }
+    <CLOSE>  { result = result.append ("}"); }
+  )*
+  { return result.toString (); }
+}

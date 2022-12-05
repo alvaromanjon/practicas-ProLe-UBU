@@ -1,0 +1,66 @@
+PARSER_BEGIN(expr2post)
+
+public class expr2post{
+
+  public static void main(String args[]) throws ParseException {
+    expr2post parser = new expr2post(System.in);
+    parser.ExpressionList();
+  }
+
+}
+
+PARSER_END(expr2post)
+
+SKIP :
+{
+  " " | "\t" | "\n" | "\r"
+}
+
+TOKEN :
+{
+  < NUM: ( ["0"-"9"] )+ >
+}
+
+void ExpressionList() :
+{
+  String res;
+}
+{
+  ( res=Expression() ";" { System.out.println("= "+res); }
+  )*
+  <EOF>
+}
+
+String Expression() :
+{
+  String res, val;
+}
+{
+  res=Term()
+  ( "+" val=Term()  { res=res+" "+val+" +"; }
+  )*
+  { return res; }
+}
+
+String Term() :
+{
+  String res, val;
+}
+{
+  res=Factor()
+  ( "*" val=Factor() { res=res+" "+val+" *"; }
+  )*
+  { return res; }
+}
+
+String Factor() :
+{
+  Token tk;
+  String res;
+}
+{
+ ( tk=<NUM> { res=tk.image; }
+   |
+  "(" res=Expression() ")"
+ ) { return res; }
+}

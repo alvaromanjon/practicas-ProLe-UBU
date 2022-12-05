@@ -1,0 +1,66 @@
+/*
+Ejemplito en el que se transforma una secuencia
+de paréntesis equilibrados, en una secuencia de
+palabras on cm, siendo n y m números, que indican
+la apertura (open) y el cierre (close) de los paréntesis,
+y donde el número identifica con que on se corresponde
+el cm (n==m).
+
+Ante una entrada como: (()(()()))()
+generaría la salida: o1 o2 c2 o3 o4 c4 o5 c5 c3 c1 o6 c6.
+
+Queda más claro si se pone la entrada sobre
+la salida que genera:
+(  (   ) (  (  )  (  )  )  )  (  )
+o1 o2 c2 o3 o4 c4 o5 c5 c3 c1 o6 c6
+
+En la generación de las etiquetas y los saltos en
+la práctica aparece un problema similar que se puede
+resolver del mismo modo
+*/
+
+PARSER_BEGIN(equi)
+
+public class equi{
+
+
+    static private int nextNumber=0;
+    private static int getNextNumber() {
+       return ++nextNumber;
+    }
+    
+    public static void main (String[] args) 
+       throws Exception {
+	equi parser = new equi(System.in);
+	parser.lequi();
+	System.out.print("\n");
+    }
+
+}
+
+PARSER_END(equi)
+
+SKIP: {
+  <SPC: [" ","\n","\t","\r"] >
+}
+
+TOKEN : {
+  <OPAR: "(">
+| <CPAR: ")">
+}
+
+void lequi() : {} {
+  ( equi() )+ 
+}
+
+void equi() : 
+{
+   int number=getNextNumber();
+}{
+    <OPAR>  { System.out.print("o"+number+" "); }
+    resto(number) 
+}
+
+void resto(int number) : {} {
+   [ lequi() ] <CPAR>  { System.out.print("c"+number+" "); }
+}

@@ -1,0 +1,45 @@
+/* 
+ * AUTOR: César García Osorio.
+ * FECHA: 19/OCT/2016
+ *
+ * Este programa ilustra como se podrían procesar los argumentos de entrada.
+ *
+ * La secuencia para probar su funcionamiento es:
+ *   javacc test4_fromSR.jj 
+ *   javac *.java 
+ *   java -cp . fromsr estos son argumentos
+ */
+
+options {
+   STATIC=false;
+}
+
+PARSER_BEGIN(fromsr)
+import java.io.*;
+
+public class fromsr {
+
+   public static void main(String args[]) throws ParseException {
+      fromsrTokenManager tkmngr;
+      Token tk;
+      if (args.length==0) return; //nothing to do
+      for (int i=0; i<args.length; i++) {
+         StringReader sr = new StringReader(args[i]);
+         SimpleCharStream input = new SimpleCharStream(sr);
+         tkmngr = new fromsrTokenManager(input);
+         try {
+            while ( (tk = tkmngr.getNextToken()).kind != EOF ) ;
+         } catch (TokenMgrError x) {
+            System.out.println("Exiting.");
+            throw x;
+         }
+         System.out.print(" ");
+      }     
+   }
+}
+PARSER_END(fromsr)
+
+SKIP:{ <VOCAL: ["a","e","i","o","u"]> {System.out.print('e');} }
+SKIP:{ <ESP: "qu"|"gu"> {System.out.print(image);} }
+SKIP:{ <~[]> { System.out.print(image); } } 
+

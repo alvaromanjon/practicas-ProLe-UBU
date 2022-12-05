@@ -1,0 +1,64 @@
+PARSER_BEGIN(exprRead)
+
+public class exprRead{
+
+  public static void main(String args[]) throws ParseException {
+    exprRead parser = new exprRead(System.in);
+    parser.Read();
+  }
+
+}
+
+PARSER_END(exprRead)
+
+SKIP :
+{
+  " " | "\t" | "\n" | "\r"
+}
+
+TOKEN :
+{
+  < NUM: ( ["0"-"9"] )+ >
+}
+
+void Read() :
+{ }
+{
+  Expression() ";"
+  <EOF>
+}
+
+void Expression() :
+{ }
+{
+  Term() ExpresionP()
+}
+
+void ExpresionP() :
+{ }
+{
+  (  "+" Term() ExpresionP() 
+   | "-" Term() ExpresionP() 
+  ) ?
+}
+
+void Term() :
+{ }
+{
+  Factor() TermpP()
+}
+
+void TermpP() :
+{ }
+{
+  ( "*" Factor() TermpP() ) ?
+}
+
+
+void Factor() :
+{ }
+{
+  <NUM>
+|
+  "(" Expression() ")"
+}

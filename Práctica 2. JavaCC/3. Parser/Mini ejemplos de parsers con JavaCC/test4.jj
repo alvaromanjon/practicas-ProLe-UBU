@@ -1,0 +1,70 @@
+PARSER_BEGIN(exprEval)
+
+public class exprEval{
+
+  public static void main(String args[]) throws ParseException {
+    exprEval parser = new exprEval(System.in);
+    parser.ExpressionList();
+  }
+
+}
+
+PARSER_END(exprEval)
+
+SKIP :
+{
+  " " | "\t" | "\r" | "\n"
+}
+
+TOKEN :
+{
+  < NUM: ( ["0"-"9"] )+ >
+}
+
+void ExpressionList() :
+{
+  int res;
+}
+{
+  ( res=Expression() ";" 
+  { System.out.println("= "+res); }
+  )*
+  <EOF>
+}
+
+int Expression() :
+{
+  int res, val;
+}
+{
+  res=Term()
+  (  "+" val=Term()  { res=res+val; } 
+   | "-" val=Term()  { res=res-val; }
+  )*
+  { return res; }
+}
+
+int Term() :
+{
+  int res, val;
+}
+{
+  res=Factor()
+  ( "*" val=Factor() { res=res*val; }
+  )*
+  { return res; }
+}
+
+int Factor() :
+{
+  Token tk;
+  int res;
+}
+{
+ ( 
+  tk=<NUM> { res=Integer.parseInt(tk.image); }
+   |
+  "(" res=Expression() ")" 
+ ) 
+ { return res; }
+}

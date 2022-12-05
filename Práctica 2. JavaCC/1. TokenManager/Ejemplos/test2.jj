@@ -1,0 +1,95 @@
+/*
+ *    javacc test2KeywordsIdentifiers.jj
+ *    javac *.java 
+ *    java -cp . test 
+*/
+
+options {
+   BUILD_TOKEN_MANAGER=true;
+   COMMON_TOKEN_ACTION=false;
+   IGNORE_CASE = false;
+}
+
+PARSER_BEGIN(test)
+public class test {
+   public static void main(String args[]) 
+                                     throws java.io.FileNotFoundException {
+      testTokenManager tkmngr;
+      if ( args.length < 1 ) {
+         tkmngr = new testTokenManager(new SimpleCharStream(System.in));
+      } else {
+         tkmngr = new testTokenManager(
+                    new SimpleCharStream(
+                      new java.io.FileInputStream(args[0]),0,0));
+      };
+      Token tk;
+      if ( args.length < 1 ) {
+         System.out.print("Enter Expression: ");
+         System.out.flush();
+      };
+      try {
+         while ( (tk = tkmngr.getNextToken()).kind != EOF ) 
+             System.out.println("<"+tokenKindString(tk.kind)+": \""+tk.image+"\">");
+      } catch (TokenMgrError x) {
+         System.out.println("Exiting.");
+         throw x;
+	    };
+      System.out.println("Número de identificadores: " + tkmngr.nIDs);
+      System.out.println("Número de números: " + tkmngr.nNUMs);
+      System.out.println("Número de comentarios: " + tkmngr.nCOMs);
+      System.out.println("Número de palabras reservadas: " + tkmngr.nKeywords);
+   }
+
+   public static String tokenKindString(int tokenKind) {
+      switch(tokenKind) {
+         case WHILE: return new String("WHILE");
+         case IF: return new String("IF");
+         case THEN: return new String("THEN");
+         case ELSE: return new String("ELSE");
+         case ID: return new String("ID");
+         case NUM: return new String("NUM");
+         default: return new String("default");
+      }
+   }
+}
+PARSER_END(test)
+
+TOKEN_MGR_DECLS:
+{
+   static int nIDs=0;
+   static int nNUMs=0;
+   static int nKeywords=0;
+   static int nCOMs=0;
+}
+
+SKIP:{ " " | "\t" | "\n" | "\r" }
+
+/*
+ * Keywords
+ */
+TOKEN:
+{
+   < IF: "if" > { nKeywords++; }
+|  < THEN: "then" > { nKeywords++; }
+|  < ELSE: "else" > { nKeywords++; }
+|  < ENDIF: "endif" > { nKeywords++; }
+|  < WHILE: "while" > { nKeywords++; }
+|  < DO: "do" > { nKeywords++; }
+}
+
+MORE:{ <StartCOM: "/*"> :  COM }
+
+<COM>SKIP:
+{
+   <EndCom: "*/"> { nCOMs++; } : DEFAULT
+|  < ~[]>
+}
+
+TOKEN : // IDENTIFIERS 
+{
+   < NUM: ( <DIGIT> )+ > {nNUMs++;}
+|  < ID: <LETTER> (<LETTER>|<DIGIT>)* > {nIDs++;}
+|  < #LETTER: ["A" - "Z", "a"-"z"] > 
+|  < #DIGIT: ["0"-"9"] > 
+|  < ESC: ~[] >
+}
