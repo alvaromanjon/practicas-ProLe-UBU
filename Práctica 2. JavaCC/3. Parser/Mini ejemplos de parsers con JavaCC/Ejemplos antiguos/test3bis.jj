@@ -1,0 +1,57 @@
+PARSER_BEGIN(exprRead2)
+
+public class exprRead2{
+
+  public static void main(String args[]) 
+       throws ParseException {
+    exprRead2 parser = new exprRead2(System.in);
+    parser.ExpressionList();
+  }
+
+}
+
+PARSER_END(exprRead2)
+
+SKIP :
+{
+  " " | "\t" | "\n" | "\r"
+}
+
+TOKEN :
+{
+  < NUM: ( ["0"-"9"] )+ >
+}
+
+void ExpressionList() :
+{
+}
+{
+  ( Expression() ";" )*
+  <EOF>
+}
+
+void Expression() :
+{
+}
+{
+  Term() 
+  (  "+" Term() 
+   | "-" Term() 
+  )*
+}
+
+void Term() :
+{
+}
+{
+  Factor() ( "*" Factor() )*
+}
+
+void Factor() :
+{
+}
+{
+  <NUM>
+|
+  "(" Expression() ")"
+}

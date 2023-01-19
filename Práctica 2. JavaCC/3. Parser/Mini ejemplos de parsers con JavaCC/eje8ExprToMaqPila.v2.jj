@@ -1,0 +1,85 @@
+/*
+ * Parser para traducir expresiones a código de máquina de pila abstracta.
+ * Traducción construida como valor de los atributos de los noterminales.
+ */
+PARSER_BEGIN(ExprToMaqPila2)
+
+public class ExprToMaqPila2 {
+  public static void main(String args[]) throws ParseException {
+    String translation;
+    ExprToMaqPila2 parser = new ExprToMaqPila2(System.in);
+    System.err.println("\ninput? ");
+    translation=parser.AssignmentList();
+    System.out.println(translation);
+  }
+}
+
+PARSER_END(ExprToMaqPila2)
+
+SKIP : { " " | "\t" | "\n" | "\r" } 
+TOKEN : {
+   < NUM: (<D>)+ >
+ | < ID: <L>(<L>|<D>)* > 
+ | <#L: ["a"-"z","A"-"Z"] > 
+ | <#D: ["0"-"9"] > 
+}
+
+String AssignmentList() : 
+{ 
+  Token tk; 
+  String exp;
+  String res="";
+}
+{
+  ( tk=<ID> ":=" 
+    exp=Expression() ";"
+    { 
+      res+="valori "+tk.image+"\n";
+      res+=exp+"asigna\n"; 
+    } 
+  )*
+  <EOF>
+  { return res; }
+}
+
+String Expression() :
+{
+  String res, val;
+}
+{
+  res=Term()
+  (  "+" val=Term()  { res=res+val+"add\n"; }
+   | "-" val=Term()  { res=res+val+"sub\n"; }
+  )*
+  { return res; }
+}
+
+String Term() :
+{
+  String res, val;
+  Token tk;
+}
+{
+  res=Factor()
+  (   "*" val=Factor() { res=res+val+"mul\n"; }
+    | "/" val=Factor() { res=res+val+"div\n"; }
+  )*
+  { return res; }
+}
+
+String Factor() :
+{
+  Token tk;
+  String res;
+}
+{
+ (   tk=<NUM> { res="mete "+tk.image+"\n"; }
+   | "(" res=Expression() ")"
+   | "-" res=Term() {res=res+" "+" menosu\n";} // menos unario
+ ) { return res; }
+}
+
+
+
+
+
