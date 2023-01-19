@@ -1,0 +1,26 @@
+PARSER_BEGIN(MaqPilaAbstrTrad)
+
+public class MaqPilaAbstrTrad {
+   public static void main(String[] args) {
+      MaqPilaAbstrTrad parser;
+      try {
+         if ( args.length < 1 ) {
+            System.err.println("input?");
+            parser = new MaqPilaAbstrTrad(System.in);
+         } else {
+            parser = new MaqPilaAbstrTrad(new java.io.FileReader(args[0]));
+         };
+         parser.S();
+         System.out.println("Syntax is okay");
+      } catch (java.io.IOException e) {
+         System.out.println("Problem opening file: "+e.getMessage());
+      } catch (TokenMgrError e) {
+         System.out.println("TokenManager failed: " + e.getMessage());
+      } catch (ParseException e) {
+         System.out.println("Syntax check failed: " + e.getMessage());
+      }
+   }
+}
+
+PARSER_END(MaqPilaAbstrTrad)
+
