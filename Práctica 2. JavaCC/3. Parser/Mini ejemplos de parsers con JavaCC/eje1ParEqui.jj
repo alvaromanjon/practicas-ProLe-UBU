@@ -1,0 +1,52 @@
+/* 
+ * Parser para reconocer una secuencia de paréntesis equilibrados.
+ */
+options
+{
+  STATIC=false;
+}
+
+PARSER_BEGIN(ParEqui)
+
+public class ParEqui{
+
+    /*
+     * A test
+     */
+    public static void main (String[] args) throws Exception {
+        ParEqui parser = new ParEqui(System.in);
+        System.err.println("\ninput? ");
+        parser.parse();
+        System.out.println("Accepted!");
+    }
+
+}
+
+PARSER_END(ParEqui)
+
+/*
+ * The terminals
+ */
+
+TOKEN : {
+  <OPEN: "(">
+| <CLOSE: ")">
+}
+
+/*
+ * The nonterminals
+ */
+
+void parse() : {} {
+  balanced() 
+  "."
+}
+
+void balanced() : {} {
+  (
+    <OPEN>
+    balanced() 
+    <CLOSE> 
+  )*
+}
+

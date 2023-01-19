@@ -1,0 +1,57 @@
+PARSER_BEGIN(asig2maqPila)
+
+public class asig2maqPila{
+
+  public static void main(String args[]) throws ParseException {
+    asig2maqPila parser = new asig2maqPila(System.in);
+    parser.AssignmentList();
+  }
+
+}
+
+PARSER_END(asig2maqPila)
+
+SKIP :
+{
+  " " | "\t" | "\n" | "\r"
+}
+
+TOKEN :
+{
+   < NUM: ( ["0"-"9"] )+ >
+ | < ID: ["a"-"z","A"-"Z"] (["a"-"z","A"-"Z","0"-"9"])* > 
+}
+
+void AssignmentList() : 
+{ Token tk; }
+{
+  ( tk=<ID> "=" {System.out.println("valori "+tk.image);} Expression() ";" )*
+  <EOF>
+}
+
+void Expression() : { }
+{
+  Term()
+  (  "+" Term()  { System.out.println("add"); }
+   | "-" Term()  { System.out.println("sub"); }
+  )*
+}
+
+void Term() : { }
+{
+  Factor()
+  (  "*" Factor() { System.out.println("mul"); }
+   | "/" Factor() { System.out.println("div"); }
+  )*
+}
+
+void Factor() :
+{
+  Token tk;
+}
+{
+ (  tk=<NUM> { System.out.println("mete "+tk.image); }
+  | "(" Expression() ")"
+  | tk=<ID>  { System.out.println("valord "+tk.image); }
+ ) 
+}
