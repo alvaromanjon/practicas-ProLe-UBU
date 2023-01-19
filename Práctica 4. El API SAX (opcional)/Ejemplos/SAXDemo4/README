@@ -1,0 +1,21 @@
+
+El contenido de este directorio es para ilustrar la activaci'on de la
+validaci'on del analizador SAX.
+
+Los ficheros con extension .ori son los ficheros originales antes de
+las modificaciones que se sugieren a continuaci'on:
+
+1. Descomentar la declaraci'on de tipo de documento, cambiar el valor
+   del atributo standalone, descomentar la referencia a entidad &acomer;
+    Cambiar una etiqueta item a tem
+2. Compilar y ejecutar el programa
+ ** No saldr'an errores ** 
+ ** Se resuelve la referencia a entidad &acomer;!!! **
+3. Modificar la dtd, cambiar ELEMENT por LEMENT
+ ** Da un error aunque no se ha activado la validaci'on !! **
+4. Corregir la DTD 
+5. Activar la validaci'on
+6. Compilar y volver a ejecutar
+ ** Ahora si que sale un error!!  **
+7. Corregir el documento, volver a ejecutar
+ ** Ahora va todo perfecto ** 

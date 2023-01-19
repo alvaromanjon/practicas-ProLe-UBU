@@ -1,0 +1,24 @@
+<?xml version="1.0" standalone="yes"?>
+<!-- Esto todavia no lo necesitamos
+<!DOCTYPE rec:receta SYSTEM "recetaNS.dtd">
+-->
+<receta xmlns:rec="http://pisuerga.inf.ubu.es/cgosorio/receta" tipo="postre" tiempoprep="15" comensales="5"> 
+<titulo>Tarta de queso</titulo>
+ <lista-ingredientes>
+  <item>3 yogures naturales</item>
+  <item>3 huevos</item>
+  <item>una cucharadita de maicena</item>
+  <item>1 tarrina de crema de queso</item>
+  <item>6 cucharadas de azucar</item>
+ </lista-ingredientes>
+ <preparacion>
+  <paso necesario="no">Tener a mano todos los ingredientes, la batidora y el recipiente para la tarta.</paso>
+  <paso>Batir todos los ingredientes.</paso>
+  <paso>Verter en un molde previamente caramelizado y cocer durante 13 minutos en el microondas a toda potencia</paso>
+  <paso necesario="no">Servir cubierto de mermelada</paso>
+<!-- No necesario hasta que lea la DTD
+  <paso necesario="no">&acomer;</paso>
+-->
+ </preparacion>
+</receta>
+

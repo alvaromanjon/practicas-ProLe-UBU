@@ -1,0 +1,4 @@
+import org.xml.sax.helpers.XMLReaderFactory;
+            XMLReader parser =
+                XMLReaderFactory.createXMLReader(
+                    "org.apache.xerces.parsers.SAXParser");

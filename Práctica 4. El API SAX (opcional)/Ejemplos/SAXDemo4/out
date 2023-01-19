@@ -1,0 +1,101 @@
+Analizando el fichero: recetaISO.xml
+
+
+ * setDocumentLocator() invocado
+Comienza el an'alisis ...
+Comienza la asignaci'on de rec al URI http://pisuerga.inf.ubu.es/cgosorio/receta
+Comienzo del elemento: receta en el espacio de nombres http://pisuerga.inf.ubu.es/cgosorio/receta (rec:receta)
+ Atributo: tipo=postre
+ Atributo: tiempoprep=15
+ Atributo: comensales=5
+espacios ignorables: [ 
+]
+Comienzo del elemento: titulo en el espacio de nombres http://pisuerga.inf.ubu.es/cgosorio/receta (rec:titulo)
+caracteres: Tarta de queso
+Cierre del elemento: titulo
+
+espacios ignorables: [
+ ]
+Comienzo del elemento: lista-ingredientes en el espacio de nombres http://pisuerga.inf.ubu.es/cgosorio/receta (rec:lista-ingredientes)
+caracteres: 
+  
+Comienzo del elemento: item en el espacio de nombres http://pisuerga.inf.ubu.es/cgosorio/receta (rec:item)
+caracteres: 3 yogures naturales
+Cierre del elemento: item
+
+caracteres: 
+  
+Comienzo del elemento: item en el espacio de nombres http://pisuerga.inf.ubu.es/cgosorio/receta (rec:item)
+caracteres: 3 huevos
+Cierre del elemento: item
+
+caracteres: 
+  
+Comienzo del elemento: item en el espacio de nombres http://pisuerga.inf.ubu.es/cgosorio/receta (rec:item)
+caracteres: una cucharadita de maicena
+Cierre del elemento: item
+
+caracteres: 
+  
+Comienzo del elemento: item en el espacio de nombres http://pisuerga.inf.ubu.es/cgosorio/receta (rec:item)
+caracteres: 1 tarrina de crema de queso
+Cierre del elemento: item
+
+caracteres: 
+  
+Comienzo del elemento: item en el espacio de nombres http://pisuerga.inf.ubu.es/cgosorio/receta (rec:item)
+caracteres: 6 cucharadas de azucar
+Cierre del elemento: item
+
+caracteres: 
+ 
+Cierre del elemento: lista-ingredientes
+
+espacios ignorables: [
+ ]
+Comienzo del elemento: preparacion en el espacio de nombres http://pisuerga.inf.ubu.es/cgosorio/receta (rec:preparacion)
+caracteres: 
+  
+Comienzo del elemento: paso en el espacio de nombres http://pisuerga.inf.ubu.es/cgosorio/receta (rec:paso)
+ Atributo: necesario=no
+caracteres: Tener a mano todos los ingredientes, la batidora y el recipiente para la tarta.
+Cierre del elemento: paso
+
+caracteres: 
+  
+Comienzo del elemento: paso en el espacio de nombres http://pisuerga.inf.ubu.es/cgosorio/receta (rec:paso)
+ Atributo: necesario=si
+caracteres: Batir todos los ingredientes.
+Cierre del elemento: paso
+
+caracteres: 
+  
+Comienzo del elemento: paso en el espacio de nombres http://pisuerga.inf.ubu.es/cgosorio/receta (rec:paso)
+ Atributo: necesario=si
+caracteres: Verter en un molde previamente caramelizado y cocer durante 13 minutos en el microondas a máxima potencia
+Cierre del elemento: paso
+
+caracteres: 
+  
+Comienzo del elemento: paso en el espacio de nombres http://pisuerga.inf.ubu.es/cgosorio/receta (rec:paso)
+ Atributo: necesario=no
+caracteres: Servir cubierto de mermelada
+Cierre del elemento: paso
+
+caracteres: 
+  
+Comienzo del elemento: paso en el espacio de nombres http://pisuerga.inf.ubu.es/cgosorio/receta (rec:paso)
+ Atributo: necesario=no
+caracteres: Bon a petit!
+Cierre del elemento: paso
+
+caracteres: 
+ 
+Cierre del elemento: preparacion
+
+espacios ignorables: [
+]
+Cierre del elemento: receta
+
+Finalizada la asignaci'on de rec
+...an'alisis finalizado.
