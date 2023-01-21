@@ -208,9 +208,20 @@ fabric.properties
 # End of https://www.toptal.com/developers/gitignore/api/intellij
 n
 
+# Flex
+Practica 1. Flex/**/lex.yy.c
+Practica 1. Flex/**/a.out
+Practica 3. Bison/**/lex.yy.c
+Practica 3. Bison/**/a.out
+
 # JavaCC
-*.class
-Practica 2. JavaCC/Practica entregable/Practica 2 segunda convocatoria/*.java
-Practica 2. JavaCC/1. TokenManager/Ejemplos/*.java
-Practica 2. JavaCC/3. Parser/Mini ejemplos de parsers con JavaCC/*.java
-Practica 2. JavaCC/3. Parser/Mini ejemplos de parsers con JavaCC/Ejemplos antiguos/*.java
+Practica 2. JavaCC/**/*.class
+# Practica 2. JavaCC/Practica entregable/Practica 2 segunda convocatoria/*.java
+# Practica 2. JavaCC/1. TokenManager/Ejemplos/*.java
+# Practica 2. JavaCC/3. Parser/Mini ejemplos de parsers con JavaCC/*.java
+# Practica 2. JavaCC/3. Parser/Mini ejemplos de parsers con JavaCC/Ejemplos antiguos/*.java
+Practica 2. JavaCC/**/*.java
+
+# Bison
+Practica 3. Bison/**/y.tab.c
+
