@@ -40,11 +40,13 @@ TOKEN : {
     | < CASE : "CASE" >
     | < RANGE : "RANGE" >
     | < PRINT : "PRINT" >
-    | < ID : "ID" >
-    | < NUM : "NUM" >
+    | < ID : <LETTER> (<LETTER> | <NUM>)* >
+    | < NUM : (<DIGIT>)+ >
+    | < EQUAL : "=" >
     | <PLUS: "+" >
     | <MINUS: "-" >
     | <MULTIPLY: "*" >
     | <DIVIDE: "/" >
+    // Mirar si hace falta poner paréntesis o no
 }
 
