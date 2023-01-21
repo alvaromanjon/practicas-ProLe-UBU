@@ -1,4 +1,8 @@
-﻿Se trata de utilizar JavaCC para obtener un compilador que traduzca un 
+﻿# Traductor con JavaCC - Primera convocatoria
+
+## Enunciado
+
+Se trata de utilizar JavaCC para obtener un compilador que traduzca un 
 lenguaje de alto nivel a código de máquina de pila abstracta. Básicamente
 lo mismo que hace el analizador recursivo descendente en C explicado en clase.
 
@@ -6,10 +10,10 @@ El lenguaje de alto nivel es muy sencillo. No tiene declaración de tipos.
 Y el único tipo que permite es el tipo entero. En las condiciones de las
 instrucciones if y while el valor 0 se interpreta como falso y cualquier 
 otro valor como cierto.
-Los operadores de incremento/decremento '++' y '--' hacen que la variable 
+Los operadores de incremento/decremento `++` y `--` hacen que la variable 
 aumente/decremente su valor en un entero.
 
-Los comentarios en el lenguaje serán en línea comenzando con "!".
+Los comentarios en el lenguaje serán en línea comenzando con `!`.
 
 Debe ser capaz de leer por entrada estándar (teclado) y por un fichero que se 
 le pase por argumento.
@@ -17,6 +21,7 @@ le pase por argumento.
 
 La gramática del lenguaje es la siguiente:
 
+```
    stmtsequence -> programstmt
                 |  programstmt stmtsequence
     programstmt -> assigconstruct
@@ -35,6 +40,7 @@ elseifconstruct -> ELSEIF '(' expr ')' THEN stmtsequence
            expr -> multexp ('+' multexp | '-' multexp)*
         multexp -> value ('*' value | '/' value)*
           value -> '(' expr ')' | NUM | ID
+```
 
 NOTAS: Podría ser necesaria alguna transformación en la la gramática antes de
        empezar a programar en JavaCC.
@@ -45,7 +51,7 @@ NOTAS: Podría ser necesaria alguna transformación en la la gramática antes de
 
 
 Ante una entrada como:
-
+```
 var = 5 + 5                 ! la variable var toma el valor de 5 + 5
 while (var) var-- endwhile  ! bucle para decrementar var
 if (5 - var)                ! Condicional
@@ -55,9 +61,11 @@ else
   print var - 0
 endif
 print 1, 2, 3, var          ! Imprimir varios valores
+```
 
 Debería mostrar (excepto quizá el número de las etiquetas):
 
+```
 	valori var
 	mete 5
 	mete 5
@@ -96,28 +104,33 @@ LBL3
 	print 
 	valord var
 	print 
-
+```
 
 
 Ante una entrada como:
 
 ! Ejemplo de condicional anidada en un bucle while
+```
 while (7 - 5 + a)
   if (c - d)
   then print c
   else print d
   endif
 endwhile
+```
 
 ! Ejemplo de bucles anidados
+```
 while (a)
   while (b)
     print a - b
   endwhile
 endwhile
+```
 
 Debería mostrar (excepto quizá el número de las etiquetas):
 
+```
 LBL0
 	mete 7
 	mete 5
@@ -152,4 +165,4 @@ LBL6
 LBL7
 	vea LBL4
 LBL5
-
+```

@@ -1,4 +1,4 @@
-# Traductor con JavaCC
+# Traductor con JavaCC - Segunda convocatoria
 
 ## Enunciado
 
