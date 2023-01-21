@@ -214,6 +214,7 @@ lex.yy.c
 # Practica 2. JavaCC/3. Parser/Mini ejemplos de parsers con JavaCC/*.java
 # Practica 2. JavaCC/3. Parser/Mini ejemplos de parsers con JavaCC/Ejemplos antiguos/*.java
 Practica 2. JavaCC/**/*.java
+Practica 2. JavaCC/**/*.html
 
 # Bison
 y.tab.c
