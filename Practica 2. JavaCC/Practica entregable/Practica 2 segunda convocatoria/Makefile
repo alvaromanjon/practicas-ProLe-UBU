@@ -14,8 +14,8 @@ clean:
 	$(RM) *~
 	$(RM) *.html
 
-test1: output
-	output in1.in
+test1: MaqPilaAbstrTrad.class
+	java -cp . MaqPilaAbstrTrad in1.in
 
-test2: output
-	output in2.in
+test2: MaqPilaAbstrTrad.class
+	java -cp . MaqPilaAbstrTrad in1.in
