@@ -209,11 +209,8 @@ fabric.properties
 n
 
 # JavaCC
-*Constants.java
-*TokenManager.java
-ParseException.java
-SimpleCharStream.java
-Token.java
-TokenMgrError.java
 *.class
-
+Practica 2. JavaCC/Practica entregable/Practica 2 segunda convocatoria/*.java
+Practica 2. JavaCC/1. TokenManager/Ejemplos/*.java
+Practica 2. JavaCC/3. Parser/Mini ejemplos de parsers con JavaCC/*.java
+Practica 2. JavaCC/3. Parser/Mini ejemplos de parsers con JavaCC/Ejemplos antiguos/*.java
