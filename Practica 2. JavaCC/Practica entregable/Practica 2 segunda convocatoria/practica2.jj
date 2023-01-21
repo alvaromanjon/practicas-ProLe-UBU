@@ -47,6 +47,14 @@ TOKEN : {
     | <MINUS: "-" >
     | <MULTIPLY: "*" >
     | <DIVIDE: "/" >
-    // Mirar si hace falta poner paréntesis o no
+    // TODO: Mirar si hace falta poner paréntesis o no
 }
 
+MORE: {
+    <StartCOM: "/*"> :  COM
+}
+
+<COM>SKIP: {
+    <EndCom: "*/"> : DEFAULT
+    | < ~[]>
+}
