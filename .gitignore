@@ -207,3 +207,13 @@ fabric.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij
 n
+
+# JavaCC
+*Constants.java
+*TokenManager.java
+ParseException.java
+SimpleCharStream.java
+Token.java
+TokenMgrError.java
+*.class
+
