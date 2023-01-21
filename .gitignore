@@ -83,10 +83,6 @@ $RECYCLE.BIN/
 *.mov
 *.avi
 
-# Flex
-*.out
-*.yy.c
-
 ### Intellij ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
@@ -206,16 +202,13 @@ fabric.properties
 .idea/**/azureSettings.xml
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij
-n
 
 # Flex
-Practica 1. Flex/**/lex.yy.c
-Practica 1. Flex/**/a.out
-Practica 3. Bison/**/lex.yy.c
-Practica 3. Bison/**/a.out
+lex.yy.c
+*.out
 
 # JavaCC
-Practica 2. JavaCC/**/*.class
+*.class
 # Practica 2. JavaCC/Practica entregable/Practica 2 segunda convocatoria/*.java
 # Practica 2. JavaCC/1. TokenManager/Ejemplos/*.java
 # Practica 2. JavaCC/3. Parser/Mini ejemplos de parsers con JavaCC/*.java
@@ -223,5 +216,5 @@ Practica 2. JavaCC/**/*.class
 Practica 2. JavaCC/**/*.java
 
 # Bison
-Practica 3. Bison/**/y.tab.c
+y.tab.c
 
