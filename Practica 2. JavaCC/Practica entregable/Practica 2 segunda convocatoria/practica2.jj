@@ -29,28 +29,28 @@ SKIP: { " " | "\t" | "\n" | "\r" }
 TOKEN : {
     < #DIGIT : ["0"-"9"] >
     | < #LETTER : ["a"-"z","A"-"Z"] >
-    | < REPEAT : "REPEAT" >
-    | < UNTIL : "UNTIL" >
-    | < IF : "IF" >
-    | < THEN : "THEN" >
-    | < ENDIF : "ENDIF" >
-    | < SWITCH : "SWITCH" >
-    | < ENDSWITCH : "ENDSWITCH" >
-    | < ELSE : "ELSE" >
-    | < CASE : "CASE" >
-    | < RANGE : "RANGE" >
-    | < PRINT : "PRINT" >
+    | < REPEAT : "repeat" >
+    | < UNTIL : "until" >
+    | < IF : "if" >
+    | < THEN : "then" >
+    | < ENDIF : "endif" >
+    | < SWITCH : "switch" >
+    | < ENDSWITCH : "endswitch" >
+    | < ELSE : "else" >
+    | < CASE : "case" >
+    | < RANGE : "range" >
+    | < PRINT : "print" >
     | < ID : <LETTER> (<LETTER> | <NUM>)* >
     | < NUM : (<DIGIT>)+ >
     | < EQUAL : "=" >
     | < COLON : ":" >
+    | < RANGEDOTS : ".." >
     | < OPENPAREN: "(" >
     | < CLOSEPAREN: ")" >
     | < PLUS: "+" >
     | < MINUS: "-" >
     | < MULTIPLY: "*" >
     | < DIVIDE: "/" >
-    // TODO: Mirar si hace falta poner paréntesis o no
 }
 
 MORE: {
@@ -64,7 +64,7 @@ MORE: {
 
 void stmtsequence() : { }
 {
-    (programstmt())+
+    programstmt() ( stmtsequence() )?
     <EOF>
 }
 
@@ -85,26 +85,26 @@ void loopconstruct() : { }
 void ifconstruct() : { }
 {
     <IF> expr() <THEN> stmtsequence()
-    ( <ELSE> stmtsequence() )?
+    //( <ELSE> stmtsequence() )?
     <ENDIF>
 }
 
 void switchconstruct() : { }
 {
-    <SWITCH> expr() <COLON> listtests() <ENDSWITCH>
-    | <SWITCH> expr() <COLON> listtests() <ELSE> stmtsequence() <ENDSWITCH>
+    <SWITCH> expr() <COLON> listtests()
+    (<ENDSWITCH>
+    | <ELSE> stmtsequence() <ENDSWITCH>)
 }
 
 void listtests() : { }
 {
-    (test())+ //( <RANGE> test() ":" stmtsequence() )*
+    test() (listtests())?
 }
 
 void test() : { }
 {
-    <CASE> expr() <COLON> stmtsequence()
-    | <RANGE> expr() "..." //TODO comprobar si es necesario y se hace así
-    expr() <COLON> stmtsequence()
+    <CASE> (<NUM>)+ <COLON> stmtsequence()
+    | <RANGE> (<NUM>)+ <RANGEDOTS> (<NUM>)+ <COLON> stmtsequence()
 }
 
 void printstmt() : { }
@@ -124,12 +124,12 @@ void assigconstruct() : { }
 
 void expr() : { }
 {
-    multexpr() ( ( <PLUS> | <MINUS> ) expr() )*
+    multexpr() ( <PLUS> multexpr() | <MINUS> multexpr() )*
 }
 
 void multexpr() : { }
 {
-    value() ( ( <MULTIPLY> | <DIVIDE> ) value() )*
+    value() ( <MULTIPLY> value() | <DIVIDE> value() )*
 }
 
 void value() : { }
