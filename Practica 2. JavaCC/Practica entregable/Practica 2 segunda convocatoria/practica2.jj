@@ -10,7 +10,7 @@ public class MaqPilaAbstrTrad {
          } else {
             parser = new MaqPilaAbstrTrad(new java.io.FileReader(args[0]));
          }
-         parser.S();
+         parser.stmtsequence();
          System.out.println("Syntax is okay");
       } catch (java.io.IOException e) {
          System.out.println("Problem opening file: "+e.getMessage());
@@ -43,18 +43,98 @@ TOKEN : {
     | < ID : <LETTER> (<LETTER> | <NUM>)* >
     | < NUM : (<DIGIT>)+ >
     | < EQUAL : "=" >
-    | <PLUS: "+" >
-    | <MINUS: "-" >
-    | <MULTIPLY: "*" >
-    | <DIVIDE: "/" >
+    | < COLON : ":" >
+    | < OPENPAREN: "(" >
+    | < CLOSEPAREN: ")" >
+    | < PLUS: "+" >
+    | < MINUS: "-" >
+    | < MULTIPLY: "*" >
+    | < DIVIDE: "/" >
     // TODO: Mirar si hace falta poner paréntesis o no
 }
 
 MORE: {
-    <StartCOM: "/*"> :  COM
+    <StartCOM : "/*"> : COM
 }
 
 <COM>SKIP: {
-    <EndCom: "*/"> : DEFAULT
+    <EndCom : "*/"> : DEFAULT
     | < ~[]>
+}
+
+void stmtsequence() : { }
+{
+    (programstmt())+
+    <EOF>
+}
+
+void programstmt() : { }
+{
+    assigconstruct()
+    | loopconstruct()
+    | ifconstruct()
+    | switchconstruct()
+    | printstmt()
+}
+
+void loopconstruct() : { }
+{
+    <REPEAT> stmtsequence() <UNTIL> expr()
+}
+
+void ifconstruct() : { }
+{
+    <IF> expr() <THEN> stmtsequence()
+    ( <ELSE> stmtsequence() )?
+    <ENDIF>
+}
+
+void switchconstruct() : { }
+{
+    <SWITCH> expr() <COLON> listtests() <ENDSWITCH>
+    | <SWITCH> expr() <COLON> listtests() <ELSE> stmtsequence() <ENDSWITCH>
+}
+
+void listtests() : { }
+{
+    (test())+ //( <RANGE> test() ":" stmtsequence() )*
+}
+
+void test() : { }
+{
+    <CASE> expr() <COLON> stmtsequence()
+    | <RANGE> expr() "..." //TODO comprobar si es necesario y se hace así
+    expr() <COLON> stmtsequence()
+}
+
+void printstmt() : { }
+{
+    <PRINT> listexpr()
+}
+
+void listexpr() : { }
+{
+    expr() ("," expr())*
+}
+
+void assigconstruct() : { }
+{
+    <ID> <EQUAL> expr()
+}
+
+void expr() : { }
+{
+    multexpr() ( ( <PLUS> | <MINUS> ) expr() )*
+}
+
+void multexpr() : { }
+{
+    value() ( ( <MULTIPLY> | <DIVIDE> ) value() )*
+}
+
+void value() : { }
+{
+    <OPENPAREN> expr() <CLOSEPAREN>
+    | <ID>
+    | <NUM>
 }
