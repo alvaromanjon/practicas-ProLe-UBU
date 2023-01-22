@@ -119,7 +119,7 @@ void test() : { }
 
 void printstmt() : { }
 {
-    <PRINT> listexpr()
+    <PRINT> listexpr()  { System.out.println("\tprint "); }
 }
 
 void listexpr() : { }
@@ -139,17 +139,21 @@ void assigconstruct() : { }
 
 void expr() : { }
 {
-    multexpr() ( <PLUS> multexpr() | <MINUS> multexpr() )*
+    multexpr() ( <PLUS> multexpr() { System.out.println("\tsum"); }
+    | <MINUS> multexpr() { System.out.println("\tsub"); } )*
 }
 
 void multexpr() : { }
 {
-    value() ( <MULTIPLY> value() | <DIVIDE> value() )*
+    value() ( <MULTIPLY> value()  { System.out.println("\tmul"); }
+    | <DIVIDE> value() { System.out.println("\tdiv"); } )*
 }
 
-void value() : { }
-{
-    <OPENPAREN> expr() <CLOSEPAREN>
-    | <ID>
-    | <NUM>
+void value() : {
+   Token tk;
+    }
+    {
+        <OPENPAREN> expr() <CLOSEPAREN>
+        | tk = <ID>     { System.out.println("\tvalord " + tk.image); }
+        | tk = <NUM>    { System.out.println("\tmete " + tk.image); }
 }
