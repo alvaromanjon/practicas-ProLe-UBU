@@ -45,6 +45,7 @@ TOKEN : {
     | < EQUAL : "=" >
     | < COLON : ":" >
     | < RANGEDOTS : ".." >
+    | < COMMA : "," >
     | < OPENPAREN: "(" >
     | < CLOSEPAREN: ")" >
     | < PLUS: "+" >
@@ -64,8 +65,12 @@ MORE: {
 
 void stmtsequence() : { }
 {
-    programstmt() ( stmtsequence() )?
-    <EOF>
+    programstmt() stmtsequenceP()
+}
+
+void stmtsequenceP() : { }
+{
+    ( programstmt() stmtsequenceP() )?
 }
 
 void programstmt() : { }
@@ -93,18 +98,23 @@ void switchconstruct() : { }
 {
     <SWITCH> expr() <COLON> listtests()
     (<ENDSWITCH>
-    | <ELSE> stmtsequence() <ENDSWITCH>)
+    | <ELSE> <COLON> stmtsequence() <ENDSWITCH>)
 }
 
 void listtests() : { }
 {
-    test() (listtests())?
+    test() listtestsP()
+}
+
+void listtestsP() : { }
+{
+    ( test() listtestsP() )?
 }
 
 void test() : { }
 {
-    <CASE> (<NUM>)+ <COLON> stmtsequence()
-    | <RANGE> (<NUM>)+ <RANGEDOTS> (<NUM>)+ <COLON> stmtsequence()
+    <CASE> expr() <COLON> stmtsequence()
+    | <RANGE> expr() <RANGEDOTS> expr() <COLON> stmtsequence()
 }
 
 void printstmt() : { }
@@ -114,7 +124,12 @@ void printstmt() : { }
 
 void listexpr() : { }
 {
-    expr() ("," expr())*
+    expr() listexprP()
+}
+
+void listexprP() : { }
+{
+    ( <COMMA> expr() listexprP() )?
 }
 
 void assigconstruct() : { }
