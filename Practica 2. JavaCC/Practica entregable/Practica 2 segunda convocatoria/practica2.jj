@@ -108,42 +108,39 @@ void ifconstruct() : {
 
 void switchconstruct() : {
     int initialLabel = getNextNumber();
-    int nextLabel = -1;
+    int currentLabel = -1;
 }
 {
     <SWITCH> expr() <COLON>
-    nextLabel = listtests(initialLabel)
+    currentLabel = listtests(initialLabel)
     (<ENDSWITCH>
-    { System.out.println("LBL" + nextLabel);
+    { System.out.println("LBL" + currentLabel);
     System.out.println("\tvea LBL" + initialLabel);
     System.out.println("LBL" + initialLabel); }
     | <ELSE> <COLON>
-    { System.out.println("LBL" + nextLabel); }
+    { System.out.println("LBL" + currentLabel); }
      stmtsequence() <ENDSWITCH>
     { System.out.println("LBL" + initialLabel); } )
 }
 
 int listtests(int firstLabel) : {
+    //int currentLabel = -1;
     int currentLabel = -1;
     int isFirstElem = -1;
-    int nextLabel = -1;
 }
 {
     currentLabel = test(firstLabel, currentLabel, isFirstElem)
-    {isFirstElem = 0;}
-    nextLabel = listtestsP(firstLabel, currentLabel, isFirstElem)
-    { return nextLabel; }
+    {isFirstElem = 0; }
+    currentLabel = listtestsP(firstLabel, currentLabel, isFirstElem)
+    { return currentLabel; }
 }
 
 int listtestsP(int firstLabel, int currentLabel, int isFirstElem) : {
-    int nextLabel = -1;
-    int returnLabel = -1;
 }
 {
-    ( nextLabel = test(firstLabel, currentLabel, isFirstElem)
-    returnLabel = listtestsP(firstLabel, nextLabel, isFirstElem) )?
-    // TO-DO: Arreglar el return
-    { return returnLabel; }
+    ( currentLabel = test(firstLabel, currentLabel, isFirstElem)
+    currentLabel = listtestsP(firstLabel, currentLabel, isFirstElem) )?
+    { return currentLabel; }
 }
 
 int test(int firstLabel, int currentLabel, int isFirstElem) : {
