@@ -63,17 +63,20 @@ MORE: {
     | < ~[]>
 }
 
-void stmtsequence() : { }
+void stmtsequence() : {
+}
 {
     programstmt() stmtsequenceP()
 }
 
-void stmtsequenceP() : { }
+void stmtsequenceP() : {
+}
 {
     ( programstmt() stmtsequenceP() )?
 }
 
-void programstmt() : { }
+void programstmt() : {
+}
 {
     assigconstruct()
     | loopconstruct()
@@ -82,68 +85,92 @@ void programstmt() : { }
     | printstmt()
 }
 
-void loopconstruct() : { }
+void loopconstruct() : {
+}
 {
     <REPEAT> stmtsequence() <UNTIL> expr()
 }
 
-void ifconstruct() : { }
+void ifconstruct() : {
+}
 {
     <IF> expr() <THEN> stmtsequence()
     //( <ELSE> stmtsequence() )?
     <ENDIF>
 }
 
-void switchconstruct() : { }
+void switchconstruct() : {
+}
 {
     <SWITCH> expr() <COLON> listtests()
     (<ENDSWITCH>
     | <ELSE> <COLON> stmtsequence() <ENDSWITCH>)
 }
 
-void listtests() : { }
+void listtests() : {
+}
 {
     test() listtestsP()
 }
 
-void listtestsP() : { }
+void listtestsP() : {
+}
 {
     ( test() listtestsP() )?
 }
 
-void test() : { }
+void test() : {
+}
 {
     <CASE> expr() <COLON> stmtsequence()
     | <RANGE> expr() <RANGEDOTS> expr() <COLON> stmtsequence()
 }
 
-void printstmt() : { }
+void printstmt() : {
+    int res = 0;
+}
 {
-    <PRINT> listexpr()  { System.out.println("\tprint "); }
+    <PRINT>
+    res = listexpr()  { System.out.println("\tprint " + res); }
 }
 
-void listexpr() : { }
+int listexpr() : {
+    int res;
+    int val;
+}
 {
-    expr() listexprP()
+    expr() { res = 1; }
+    val = listexprP(res)
+    { return val; }
 }
 
-void listexprP() : { }
+int listexprP(int res) : {
+}
 {
-    ( <COMMA> expr() listexprP() )?
+    ( <COMMA> expr() { res = res + 1; } listexprP(res) )?
+    { return res; }
 }
 
-void assigconstruct() : { }
+void assigconstruct() : {
+    Token tk;
+}
 {
-    <ID> <EQUAL> expr()
+    tk=<ID> <EQUAL>
+    { System.out.println("\tvalori " + tk.image); }
+    expr()
+    { System.out.println("\tasigna"); }
+
 }
 
-void expr() : { }
+void expr() : {
+}
 {
     multexpr() ( <PLUS> multexpr() { System.out.println("\tsum"); }
     | <MINUS> multexpr() { System.out.println("\tsub"); } )*
 }
 
-void multexpr() : { }
+void multexpr() : {
+}
 {
     value() ( <MULTIPLY> value()  { System.out.println("\tmul"); }
     | <DIVIDE> value() { System.out.println("\tdiv"); } )*
@@ -151,9 +178,9 @@ void multexpr() : { }
 
 void value() : {
    Token tk;
-    }
-    {
-        <OPENPAREN> expr() <CLOSEPAREN>
-        | tk = <ID>     { System.out.println("\tvalord " + tk.image); }
-        | tk = <NUM>    { System.out.println("\tmete " + tk.image); }
+}
+{
+    <OPENPAREN> expr() <CLOSEPAREN>
+    | tk = <ID>     { System.out.println("\tvalord " + tk.image); }
+    | tk = <NUM>    { System.out.println("\tmete " + tk.image); }
 }
