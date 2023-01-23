@@ -2,36 +2,38 @@
 
 ## Enunciado
 
-Se trata de utilizar JavaCC para obtener un compilador que traduzca un 
+Se trata de utilizar JavaCC para obtener un compilador que traduzca un
 lenguaje de alto nivel a código de máquina de pila abstracta. Básicamente
 lo mismo que hace el analizador recursivo descendente en C explicado en clase.
 
 El lenguaje de alto nivel es muy sencillo. No tiene declaración de tipos.
 Y el único tipo que permite es el tipo entero. En las condiciones de las
-instrucciones if y while el valor 0 se interpreta como falso y cualquier 
+instrucciones if y while el valor 0 se interpreta como falso y cualquier
 otro valor como cierto.
 
-Los operadores de incremento/decremento `++` y `--` hacen que la variable 
+Los operadores de incremento/decremento `++` y `--` hacen que la variable
 aumente/decremente su valor en un entero.
 
-Se utilizan los delimitadores `/*` y `*/` para marcar el inicio y fin 
+Se utilizan los delimitadores `/*` y `*/` para marcar el inicio y fin
 de los comentarios.
 
-Debe ser capaz de leer por entrada estándar (teclado) y por un fichero que se 
+Debe ser capaz de leer por entrada estándar (teclado) y por un fichero que se
 le pase por argumento.
 
 Suponer que, además de las vistas en los vídeos, el conjunto de instrucciones
 de máquina de pila se ha ampliado con las instrucciones:
+
 - `duplica`: duplica el elemento que hubiera en el tope.
 - `print n`: imprime en secuencia los n elementos del tope de pila.
 - `igual`: consume los dos elementos del tope de pila metiendo 1 si eran
-         iguales, 0 si no lo eran.
+  iguales, 0 si no lo eran.
 - `menoroigual`: si tope-1 es menor o igual que tope dejará un 1 como nuevo tope
-               tras consumir tope-1 y tope, en caso contrario lo que dejará en tope
-               es un 0.
+  tras consumir tope-1 y tope, en caso contrario lo que dejará en tope
+  es un 0.
 - `intercambia`: intercambia tope con tope-1.
 
 La gramática sería:
+
 ```
    stmtsequence -> programstmt
                 |  programstmt stmtsequence
@@ -49,18 +51,21 @@ switchconstruct -> SWITCH expr ':' listtests ENDSWITCH
                 |  RANGE E..E: stmtsequence
       printstmt -> PRINT listexpr
       listexpr  -> expr | listexpr ',' expr
- assigconstruct -> ID '=' expr 
+ assigconstruct -> ID '=' expr
            expr -> multexp ('+' multexp | '-' multexp)*
         multexp -> value ('*' value | '/' value)*
           value -> '(' expr ')' | NUM | ID
 ```
 
 Para una entrada como:
+
 ```
 print 10, 12
 repeat a=a+1 until a-10
 ```
+
 Debería dar:
+
 ```
     mete 10
     mete 12
@@ -74,10 +79,11 @@ LBL0
     valord a
     mete 10
     sub
-    sifalsovea LBL0
+    siciertovea LBL0
 ```
 
 Para una entrada como:
+
 ```
 switch a+2:
  case 2: print 2
@@ -87,6 +93,7 @@ endswitch
 ```
 
 Debería dar:
+
 ```
     valord a
     mete 2

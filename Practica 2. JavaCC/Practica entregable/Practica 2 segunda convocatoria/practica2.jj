@@ -96,7 +96,7 @@ void loopconstruct() : {
 }
 {
     <REPEAT> { System.out.println("LBL" + label); }
-    stmtsequence() <UNTIL> expr() { System.out.println("\tsifalsovea LBL" + label); }
+    stmtsequence() <UNTIL> expr() { System.out.println("\tsiciertovea LBL" + label); }
 }
 
 void ifconstruct() : {
