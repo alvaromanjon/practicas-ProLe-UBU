@@ -20,6 +20,12 @@ public class MaqPilaAbstrTrad {
          System.out.println("Syntax check failed: " + e.getMessage());
       }
    }
+
+   static private int nextNumber = -1;
+
+   private static int getNextNumber() {
+       return ++nextNumber;
+   }
 }
 
 PARSER_END(MaqPilaAbstrTrad)
@@ -86,9 +92,11 @@ void programstmt() : {
 }
 
 void loopconstruct() : {
+    int label = getNextNumber();
 }
 {
-    <REPEAT> stmtsequence() <UNTIL> expr()
+    <REPEAT> { System.out.println("LBL" + label); }
+    stmtsequence() <UNTIL> expr() { System.out.println("\tsifalsovea LBL" + label); }
 }
 
 void ifconstruct() : {
@@ -99,30 +107,75 @@ void ifconstruct() : {
 }
 
 void switchconstruct() : {
+    int initialLabel = getNextNumber();
+    int nextLabel = -1;
 }
 {
-    <SWITCH> expr() <COLON> listtests()
+    <SWITCH> expr() <COLON>
+    nextLabel = listtests(initialLabel)
     (<ENDSWITCH>
-    | <ELSE> <COLON> stmtsequence() <ENDSWITCH>)
+    { System.out.println("LBL" + nextLabel);
+    System.out.println("\tvea LBL" + initialLabel);
+    System.out.println("LBL" + initialLabel); }
+    | <ELSE> <COLON>
+    { System.out.println("LBL" + nextLabel); }
+     stmtsequence() <ENDSWITCH>
+    { System.out.println("LBL" + initialLabel); } )
 }
 
-void listtests() : {
+int listtests(int firstLabel) : {
+    int currentLabel = -1;
+    int isFirstElem = -1;
+    int nextLabel = -1;
 }
 {
-    test() listtestsP()
+    currentLabel = test(firstLabel, currentLabel, isFirstElem)
+    {isFirstElem = 0;}
+    nextLabel = listtestsP(firstLabel, currentLabel, isFirstElem)
+    { return nextLabel; }
 }
 
-void listtestsP() : {
+int listtestsP(int firstLabel, int currentLabel, int isFirstElem) : {
+    int nextLabel = -1;
+    int returnLabel = -1;
 }
 {
-    ( test() listtestsP() )?
+    ( nextLabel = test(firstLabel, currentLabel, isFirstElem)
+    returnLabel = listtestsP(firstLabel, nextLabel, isFirstElem) )?
+    // TO-DO: Arreglar el return
+    { return returnLabel; }
 }
 
-void test() : {
+int test(int firstLabel, int currentLabel, int isFirstElem) : {
+    int nextLabel = -1;
+    if (isFirstElem == 0) { System.out.println("LBL" + currentLabel); }
 }
 {
-    <CASE> expr() <COLON> stmtsequence()
-    | <RANGE> expr() <RANGEDOTS> expr() <COLON> stmtsequence()
+    <CASE>
+    { System.out.println("\tduplica"); }
+    expr() <COLON>
+    { System.out.println("\tigual");
+    nextLabel = getNextNumber();
+    System.out.println("\tsifalsovea LBL" + nextLabel); }
+    stmtsequence()
+    { System.out.println("\tvea LBL" + firstLabel); }
+    { return nextLabel; }
+    |
+    <RANGE>
+    { System.out.println("\tduplica"); }
+    expr()
+    { System.out.println("\tintercambia");
+    System.out.println("\tmenoroigual");
+    nextLabel = getNextNumber();
+    System.out.println("\tsifalsovea LBL" + nextLabel); }
+    <RANGEDOTS>
+    { System.out.println("\tduplica"); }
+    expr() <COLON>
+    { System.out.println("\tmenoroigual");
+    System.out.println("\tsifalsovea LBL" + nextLabel); }
+    stmtsequence()
+    { System.out.println("\tvea LBL" + firstLabel); }
+    {return nextLabel;}
 }
 
 void printstmt() : {
