@@ -30,7 +30,7 @@ clean:
 	$(RM) *.html
 
 test1: MaqPilaAbstrTrad.class
-	java -cp . MaqPilaAbstrTrad in1.in
+	./run MaqPilaAbstrTrad on in1.in
 
 test2: MaqPilaAbstrTrad.class
-	java -cp . MaqPilaAbstrTrad in2.in
+	./run MaqPilaAbstrTrad on in2.in
