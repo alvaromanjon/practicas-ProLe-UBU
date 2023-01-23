@@ -100,9 +100,14 @@ void loopconstruct() : {
 }
 
 void ifconstruct() : {
+    int label = getNextNumber();
 }
 {
-    <IF> expr() <THEN> stmtsequence()
+    <IF> expr()
+    { System.out.println("\tigual");
+    System.out.println("\tsifalsovea LBL" + label); }
+    <THEN> stmtsequence()
+    { System.out.println("LBL" + label); }
     <ENDIF>
 }
 
@@ -124,7 +129,6 @@ void switchconstruct() : {
 }
 
 int listtests(int firstLabel) : {
-    //int currentLabel = -1;
     int currentLabel = -1;
     int isFirstElem = -1;
 }

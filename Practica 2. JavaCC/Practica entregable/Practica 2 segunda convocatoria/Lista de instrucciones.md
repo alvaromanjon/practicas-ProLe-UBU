@@ -9,7 +9,7 @@
 - [ ] `copia` (_Revisar_): Copia el tope de la pila e inserta el mismo elemento encima.
 - [x] `vea etiq`: El flujo del programa salta a la etiqueta `etiq`, para que se ejecute lo que esté debajo de esa etiqueta.
 - [x] `sifalsovea etiq`: En caso de que el valor del tope de la pila sea 0, se irá a la etiqueta `etiq`.
-- [ ] `siciertovea etiq`: En caso de que el valor del tope de la pila sea distinto de 0, se irá a la etiqueta `etiq`.
+- [x] `siciertovea etiq`: En caso de que el valor del tope de la pila sea distinto de 0, se irá a la etiqueta `etiq`.
 - [x] `duplica`: Duplica el elemento que hubiera en el tope.
 - [x] `print n`: Imprime en secuencia los n elementos del tope de pila.
 - [x] `igual`: Saca los dos elementos del tope de pila e inserta un 1 si eran iguales, y un 0 si no.
