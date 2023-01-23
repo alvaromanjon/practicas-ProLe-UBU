@@ -95,7 +95,6 @@ void ifconstruct() : {
 }
 {
     <IF> expr() <THEN> stmtsequence()
-    //( <ELSE> stmtsequence() )?
     <ENDIF>
 }
 
@@ -136,18 +135,17 @@ void printstmt() : {
 
 int listexpr() : {
     int res;
-    int val;
 }
 {
     expr() { res = 1; }
-    val = listexprP(res)
-    { return val; }
+    res = listexprP(res)
+    { return res; }
 }
 
 int listexprP(int res) : {
 }
 {
-    ( <COMMA> expr() { res = res + 1; } listexprP(res) )?
+    ( <COMMA> expr() { res = res + 1; } res = listexprP(res) )?
     { return res; }
 }
 
