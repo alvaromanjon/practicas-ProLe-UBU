@@ -34,18 +34,36 @@ programstmt: assigconstruct
 loopconstruct: REPEAT stmtsequence UNTIL expr;
 ifconstruct: IF expr THEN stmtsequence ENDIF;
 switchconstruct: SWITCH expr COLON listtests ENDSWITCH
-                | SWITCH expr COLON listtests ELSE stmtsequence ENDSWITCH;
+                | SWITCH expr COLON listtests ELSE COLON stmtsequence ENDSWITCH;
 listtests: test | listtests test;
-test: CASE expr COLON stmtsequence
-      | RANGE expr RANGEDOTS expr COLON stmtsequence;
-printstmt: PRINT listexpr;
+test: CASE { printf("\tduplica\n"); }
+      expr COLON  { printf("\tigual\n"); }
+      stmtsequence
+      | RANGE { printf("\tduplica\n"); }
+      expr  { printf("\tintercambia\n"); 
+              printf("\tmenoroigual\n"); }
+      RANGEDOTS { printf("\tduplica\n"); }
+      expr COLON { printf("\tmenoroigual\n"); }
+      stmtsequence;
+
+printstmt: PRINT listexpr { printf("\tprint\n"); }; //TODO hacer contador para el print
+
 listexpr: expr | listexpr COMMA expr;
-assigconstruct: ID EQUAL expr;
-expr: multexp | expr PLUS multexp | expr MINUS multexp;
-multexp: value | multexp MULTIPLY value | multexp DIVIDE value;
+
+assigconstruct: ID EQUAL { printf("\tvalori %s\n", $1); }
+                expr  { printf("\tasigna\n"); };
+
+expr: multexp | expr PLUS multexp { printf("\tsum\n"); }
+              | expr MINUS multexp  { printf("\tsub\n"); }
+              ;
+
+multexp: value | multexp MULTIPLY value { printf("\tmul\n"); }
+               | multexp DIVIDE value { printf("\tdiv\n"); }
+               ;
+
 value: OPENPAREN expr CLOSEPAREN
-      | NUM
-      | ID;
+      | ID  { printf("\tvalord %s\n", $1); }
+      | NUM { printf("\tmete %d\n", $1); }
 
 %%
 
@@ -62,10 +80,7 @@ int main(int argc, char **argv) {
       exit(1);
     }
     yyin = file;
-  } else {
-    yyin = stdin;
-    printf("Escribe el código: ");
-  }
+  } 
   yyparse();
   return 0;
 }
