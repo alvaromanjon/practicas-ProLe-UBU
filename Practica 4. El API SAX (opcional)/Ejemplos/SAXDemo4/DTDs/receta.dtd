@@ -1,0 +1,15 @@
+<!ELEMENT rec:receta (rec:titulo, rec:lista-ingredientes, rec:preparacion)>
+<!ATTLIST rec:receta
+        xmlns:rec CDATA #REQUIRED
+	tipo CDATA #IMPLIED
+	comensales CDATA #IMPLIED
+	tiempoprep CDATA #IMPLIED>
+<!ELEMENT rec:titulo (#PCDATA)>
+<!ELEMENT rec:lista-ingredientes (item+)>
+<!ELEMENT rec:item (#PCDATA)>
+<!ELEMENT rec:preparacion (paso+)>
+<!ELEMENT rec:paso (#PCDATA)>
+<!ATTLIST rec:paso
+	necesario (si|no) "si">
+<!ENTITY acomer "<rec:paso necesario='no'>Bon a petit!</rec:paso>">
+
