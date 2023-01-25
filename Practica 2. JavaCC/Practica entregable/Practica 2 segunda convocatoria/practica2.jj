@@ -46,7 +46,7 @@ TOKEN : {
     | < CASE : "case" >
     | < RANGE : "range" >
     | < PRINT : "print" >
-    | < ID : <LETTER> (<LETTER> | <NUM>)* >
+    | < ID : <LETTER> (<LETTER> | <DIGIT>)* >
     | < NUM : (<DIGIT>)+ >
     | < EQUAL : "=" >
     | < COLON : ":" >

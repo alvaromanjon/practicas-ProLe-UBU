@@ -21,7 +21,7 @@ LETTER [a-zA-Z]
 "case"                        return CASE;
 "range"                       return RANGE;
 "print"                       return PRINT;
-{LETTER}({LETTER}|{NUM})*     { yylval.id = strdup(yytext); 
+{LETTER}({LETTER}|{DIGIT})*   { yylval.id = strdup(yytext); 
                                 return ID; }
 {DIGIT}+                      { yylval.num = atoi(yytext); 
                                 return NUM; }
