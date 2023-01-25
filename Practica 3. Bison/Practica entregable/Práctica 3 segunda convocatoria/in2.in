@@ -1,0 +1,5 @@
+switch a+2:
+ case 2: print 2
+ range 4..2*a: print 4
+ else: print a, 666
+endswitch
