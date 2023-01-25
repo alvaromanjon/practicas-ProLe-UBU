@@ -217,5 +217,6 @@ Practica 2. JavaCC/**/*.java
 Practica 2. JavaCC/**/*.html
 
 # Bison
+y.tab.h
 y.tab.c
 
