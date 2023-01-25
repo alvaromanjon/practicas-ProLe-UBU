@@ -1,0 +1,18 @@
+#!/bin/bash
+PGM=$1.out
+SEP=$2
+INPUT=$3
+NIN=`cat $INPUT | wc -l`
+echo "\nOUTPUT\n" > out.txt
+./$PGM < $INPUT >> out.txt
+NOUT=`cat out.txt | wc -l`
+D=$(( NOUT/(NIN+1)-1 ))
+echo "\nINPUT\n" > aux.in
+cat $INPUT >> aux.in
+for ((a=1;a<$D;a++)); do 
+    echo "-------------------------" >> aux.in
+    cat $INPUT >> aux.in
+done
+pr -m -t aux.in out.txt
+rm out.txt aux.in
+#echo $NOUT $NIN $D

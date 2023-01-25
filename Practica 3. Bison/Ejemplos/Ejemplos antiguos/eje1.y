@@ -1,6 +1,7 @@
 %{
 #include <stdio.h>
-%}
+}
+
 %token NUM
 
 %%

@@ -1,4 +1,5 @@
  #include "y.tab.h"
+%option noyywrap
 %%
 [0-9]*[02468]	{
 	yylval.p=atoi(yytext);
