@@ -39,7 +39,7 @@ programstmt: assigconstruct
 loopconstruct: { int initialLabel = getNewLabel(); $<num>$ = initialLabel; }
               REPEAT  { printf("LBL%d\n", $<num>1); }
               stmtsequence UNTIL expr
-              { printf("\tsiciertovea LBL%d\n", $<num>1); }
+              { printf("\tsifalsovea LBL%d\n", $<num>1); }
               ;
 
 ifconstruct: { int initialLabel = getNewLabel(); $<num>$ = initialLabel; }

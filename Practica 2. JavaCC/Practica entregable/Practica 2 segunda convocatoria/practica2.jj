@@ -104,8 +104,7 @@ void ifconstruct() : {
 }
 {
     <IF> expr()
-    { System.out.println("\tigual");
-    System.out.println("\tsifalsovea LBL" + label); }
+    { System.out.println("\tsifalsovea LBL" + label); }
     <THEN> stmtsequence() <ENDIF>
     { System.out.println("LBL" + label); }
 }
