@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// Para compilar en modo debug, poner yydebug = 1
+int yydebug = 1;
+
 int yylex();
 void yyerror(const char *s);
 

@@ -16,6 +16,12 @@ verbose: practica3.y
 	gcc lex.yy.c y.tab.c -o practica3.out
 	./practica3.out
 
+debug: practica3.y
+	bison -yd practica3.y
+	flex practica3.l
+	gcc -g lex.yy.c y.tab.c -o practica3.out -DYYDEBUG
+	./practica3.out
+
 clean:
 	$(RM) lex.yy.c
 	$(RM) y.tab.c
