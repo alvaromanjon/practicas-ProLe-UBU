@@ -42,7 +42,12 @@ loopconstruct: { int initialLabel = getNewLabel(); $<num>$ = initialLabel; }
               { printf("\tsiciertovea LBL%d\n", $<num>1); }
               ;
 
-ifconstruct: IF expr THEN stmtsequence ENDIF;
+ifconstruct: { int initialLabel = getNewLabel(); $<num>$ = initialLabel; }
+            IF expr { printf("\tigual\n"); 
+                      printf("\tsifalsovea LBL%d\n", $<num>1); }
+            THEN stmtsequence ENDIF
+            { printf("LBL%d\n", $<num>1); }
+            ;
 
 switchconstruct: SWITCH expr COLON listtests ENDSWITCH
                 | SWITCH expr COLON listtests ELSE COLON stmtsequence ENDSWITCH;
