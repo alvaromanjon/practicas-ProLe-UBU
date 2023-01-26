@@ -39,13 +39,13 @@ programstmt: assigconstruct
             | switchconstruct
             | printstmt;
 
-loopconstruct: { int initialLabel = getNewLabel(); $<num>$ = initialLabel; }
+loopconstruct: { $<num>$ = getNewLabel(); }
               REPEAT  { printf("LBL%d\n", $<num>1); }
               stmtsequence UNTIL expr
               { printf("\tsifalsovea LBL%d\n", $<num>1); }
               ;
 
-ifconstruct: { int initialLabel = getNewLabel(); $<num>$ = initialLabel; }
+ifconstruct: { $<num>$ = getNewLabel(); }
             IF expr { printf("\tsifalsovea LBL%d\n", $<num>1); }
             THEN stmtsequence ENDIF
             { printf("LBL%d\n", $<num>1); }
@@ -70,17 +70,20 @@ listtests: { $<num>$ = getNewLabel(); }
           ;
 
 test:
-      test2 stmtsequence { printf("\tvea LBL%d\n", $<num>0); 
-                          $<num>$=$<num>1; printf("LBL%d\n", $<num>$); }
-      | test2 COLON stmtsequence { printf("\tvea LBL%d\n", $<num>0); 
-                                  $<num>$=$<num>1; printf("LBL%d\n", $<num>$); }
+      labeltest stmtsequence { printf("\tvea LBL%d\n", $<num>0); 
+                              $<num>$=$<num>1; 
+                              printf("LBL%d\n", $<num>$); }
+      | labeltest COLON stmtsequence { printf("\tvea LBL%d\n", $<num>0); 
+                                      $<num>$=$<num>1; 
+                                      printf("LBL%d\n", $<num>$); }
       ;
 
-test2: CASE 
+labeltest: CASE 
       { printf("\tduplica\n"); }
       expr COLON 
       { printf("\tigual\n"); }
-      { $<num>$=getNewLabel(); printf("\tsifalsovea LBL%d\n", $<num>$ ); }
+      { $<num>$=getNewLabel(); 
+        printf("\tsifalsovea LBL%d\n", $<num>$ ); }
       | 
       RANGE 
       { printf("\tduplica\n"); }
@@ -88,17 +91,20 @@ test2: CASE
       { printf("\tintercambia\n"); }
       { printf("\tmenoroigual\n"); }
       { $<num>$=getNewLabel(); 
-      printf("\tsifalsovea LBL%d\n", $<num>$ ); }
+        printf("\tsifalsovea LBL%d\n", $<num>$ ); }
       RANGEDOTS 
       { printf("\tduplica\n"); }
       expr 
       { printf("\tmenoroigual\n"); }
-      { $<num>$ = $<num>6; printf("\tsifalsovea LBL%d\n", $<num>$); }
+      { $<num>$ = $<num>6; 
+        printf("\tsifalsovea LBL%d\n", $<num>$); }
       ;
 
 printstmt: PRINT listexpr { printf("\tprint %d\n", $<num>2); };
 
-listexpr: expr { $<num>$=1; } | listexpr COMMA expr { $<num>$=$<num>1+1; };
+listexpr: expr { $<num>$=1; } 
+          | 
+          listexpr COMMA expr { $<num>$=$<num>1+1; };
 
 assigconstruct: ID EQUAL { printf("\tvalori %s\n", $1); }
                 expr  { printf("\tasigna\n"); };
