@@ -9,7 +9,7 @@ int yylex();
 void yyerror(const char *s);
 
 extern FILE *yyin;
-static int nextNumber = -1;
+static int nextNumber = 0;
 
 int getNewLabel() {
     return nextNumber++;
@@ -36,7 +36,11 @@ programstmt: assigconstruct
             | switchconstruct
             | printstmt;
 
-loopconstruct: REPEAT stmtsequence UNTIL expr;
+loopconstruct: { int initialLabel = getNewLabel(); $<num>$ = initialLabel; }
+              REPEAT  { printf("LBL%d\n", $<num>1); }
+              stmtsequence UNTIL expr
+              { printf("\tsiciertovea LBL%d\n", $<num>1); }
+              ;
 
 ifconstruct: IF expr THEN stmtsequence ENDIF;
 
