@@ -1,0 +1,12 @@
+a = 0
+b = 10
+repeat
+    switch (a-2):
+        case 2: a=a+1
+        else:
+            switch (b):
+                case (b-5):
+                    b=b-1
+            endswitch
+    endswitch
+until (a-b)

@@ -34,3 +34,12 @@ test1: MaqPilaAbstrTrad.class
 
 test2: MaqPilaAbstrTrad.class
 	./run MaqPilaAbstrTrad on in2.in
+
+test3: MaqPilaAbstrTrad.class
+	./run MaqPilaAbstrTrad on in3.in
+
+test4: MaqPilaAbstrTrad.class
+	./run MaqPilaAbstrTrad on in4.in
+
+test5: MaqPilaAbstrTrad.class
+	./run MaqPilaAbstrTrad on in5.in

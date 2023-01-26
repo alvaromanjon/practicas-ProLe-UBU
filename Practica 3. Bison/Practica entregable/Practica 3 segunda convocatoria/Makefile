@@ -33,3 +33,12 @@ test1: practica3.out in1.in
 
 test2: practica3.out in2.in
 	./run practica3.out on in2.in
+
+test3: practica3.out in3.in
+	./run practica3.out on in3.in
+
+test4: practica3.out in4.in
+	./run practica3.out on in4.in	
+
+test5: practica3.out in5.in
+	./run practica3.out on in5.in
