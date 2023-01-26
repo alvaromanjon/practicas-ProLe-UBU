@@ -32,7 +32,9 @@ LETTER [a-zA-Z]
 "("                           return OPENPAREN;
 ")"                           return CLOSEPAREN;
 "+"                           return PLUS;
+"++"                          return DOUBLEPLUS;  
 "-"                           return MINUS;
+"--"                          return DOUBLEMINUS;
 "*"                           return MULTIPLY;
 "/"                           return DIVIDE;
 [ \t\r\n]                     ;

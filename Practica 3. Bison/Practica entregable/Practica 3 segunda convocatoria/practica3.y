@@ -21,7 +21,7 @@ int getNewLabel() {
     char *id;
 }
 
-%token REPEAT UNTIL IF THEN ENDIF SWITCH ENDSWITCH ELSE CASE RANGE PRINT EQUAL COLON RANGEDOTS COMMA OPENPAREN CLOSEPAREN PLUS MINUS MULTIPLY DIVIDE
+%token REPEAT UNTIL IF THEN ENDIF SWITCH ENDSWITCH ELSE CASE RANGE PRINT EQUAL COLON RANGEDOTS COMMA OPENPAREN CLOSEPAREN PLUS DOUBLEPLUS MINUS DOUBLEMINUS MULTIPLY DIVIDE
 %token <num> NUM
 %token <id> ID
 
@@ -107,7 +107,20 @@ listexpr: expr { $<num>$=1; }
           listexpr COMMA expr { $<num>$=$<num>1+1; };
 
 assigconstruct: ID EQUAL { printf("\tvalori %s\n", $1); }
-                expr  { printf("\tasigna\n"); };
+                expr  { printf("\tasigna\n"); }
+                |
+                ID DOUBLEPLUS { printf("\tvalori %s\n", $<id>1); 
+                                printf("\tvalord %s\n", $<id>1);
+                                printf("\tmete 1\n"); 
+                                printf("\tsum\n"); 
+                                printf("\tasigna\n"); }
+                |
+                ID DOUBLEMINUS { printf("\tvalori %s\n", $<id>1); 
+                                 printf("\tvalord %s\n", $<id>1);
+                                 printf("\tmete 1\n"); 
+                                 printf("\tsub\n"); 
+                                 printf("\tasigna\n"); }
+                ;
 
 expr: multexp | expr PLUS multexp { printf("\tsum\n"); }
               | expr MINUS multexp  { printf("\tsub\n"); }

@@ -55,7 +55,9 @@ TOKEN : {
     | < OPENPAREN: "(" >
     | < CLOSEPAREN: ")" >
     | < PLUS: "+" >
+    | < DOUBLEPLUS: "++" >
     | < MINUS: "-" >
+    | <DOUBLEMINUS: "--" >
     | < MULTIPLY: "*" >
     | < DIVIDE: "/" >
 }
@@ -205,11 +207,19 @@ void assigconstruct() : {
     Token tk;
 }
 {
-    tk=<ID> <EQUAL>
-    { System.out.println("\tvalori " + tk.image); }
-    expr()
-    { System.out.println("\tasigna"); }
-
+    tk=<ID>
+    (<EQUAL> { System.out.println("\tvalori " + tk.image); }
+    expr() { System.out.println("\tasigna"); }
+    | <DOUBLEPLUS> { System.out.println("\tvalori " + tk.image);
+                    System.out.println("\tvalord " + tk.image);
+                    System.out.println("\tmete 1");
+                    System.out.println("\tsum");
+                    System.out.println("\tasigna"); }
+    | <DOUBLEMINUS> { System.out.println("\tvalori " + tk.image);
+                    System.out.println("\tvalord " + tk.image);
+                    System.out.println("\tmete 1");
+                    System.out.println("\tsub");
+                    System.out.println("\tasigna"); })
 }
 
 void expr() : {
