@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Para compilar en modo debug, poner yydebug = 1 y usar en gcc el flag 
+// Para compilar en modo debug, poner yydebug = 1 y usar en gcc el flag -DYYDEBUG
 int yydebug = 1;
 
 // Cabeceras de las funciones que genera flex
