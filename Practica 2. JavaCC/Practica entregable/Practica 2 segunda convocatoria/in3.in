@@ -1,0 +1,8 @@
+switch (a+2):
+ range 4..2*a:
+    b=5
+    c=8
+    d=1
+    repeat b=b+d print a until (b-c)
+ else: print a, 666
+endswitch
