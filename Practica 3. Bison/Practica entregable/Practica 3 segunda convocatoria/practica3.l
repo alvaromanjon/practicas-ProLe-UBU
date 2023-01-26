@@ -1,4 +1,15 @@
 %{
+/**
+* Práctica 3 2a convocatoria
+* Procesadores del Lenguaje
+* Curso 2022/2023
+*
+* Analizador léxico
+*
+* @author Álvaro Manjón Vara
+* @date 26-01-2023
+*/
+
 #include "y.tab.h"
 #include <string.h>
 %}
