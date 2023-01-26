@@ -1,12 +1,25 @@
+/**
+* Práctica 2 2a convocatoria
+* Procesadores del Lenguaje
+* Curso 2022/2023
+*
+* @author Álvaro Manjón Vara
+* @date 26-01-2023
+*/
+
+ // Definición del parser
 PARSER_BEGIN(MaqPilaAbstrTrad)
 
 public class MaqPilaAbstrTrad {
    public static void main(String[] args) {
+       // Creación del parser
       MaqPilaAbstrTrad parser;
       try {
+          // Entrada a mano
          if ( args.length < 1 ) {
             System.err.println("input?");
             parser = new MaqPilaAbstrTrad(System.in);
+            // Entrada por fichero
          } else {
             parser = new MaqPilaAbstrTrad(new java.io.FileReader(args[0]));
          }
@@ -20,7 +33,7 @@ public class MaqPilaAbstrTrad {
          System.out.println("Syntax check failed: " + e.getMessage());
       }
    }
-
+    // Variable estática para las etiquetas
    static private int nextNumber = -1;
    private static int getNextNumber() {
        return ++nextNumber;
@@ -29,8 +42,10 @@ public class MaqPilaAbstrTrad {
 
 PARSER_END(MaqPilaAbstrTrad)
 
+// Definición de los tókenes Skip
 SKIP: { " " | "\t" | "\n" | "\r" }
 
+// Definición de los tókenes
 TOKEN : {
     < #DIGIT : ["0"-"9"] >
     | < #LETTER : ["a"-"z","A"-"Z"] >
@@ -61,6 +76,7 @@ TOKEN : {
     | < DIVIDE: "/" >
 }
 
+// Reglas para ignorar comentarios
 MORE: {
     < StartCOM : "/*" > : COM
 }
@@ -70,18 +86,34 @@ MORE: {
     | < ~[]>
 }
 
+/**
+* stmtsequence -> programstmt
+*               |  programstmt stmtsequence
+* Con la eliminación de la recursión izquierda pasa a ser:
+* stmtsequence -> programstmt stmtsequenceP
+*/
 void stmtsequence() : {
 }
 {
     programstmt() stmtsequenceP()
 }
 
+/**
+* stmtsequenceP -> programstmt stmtsequenceP
+*/
 void stmtsequenceP() : {
 }
 {
     ( programstmt() stmtsequenceP() )?
 }
 
+/**
+* programstmt -> assigconstruct
+*             |  loopconstruct
+*             |  ifconstruct
+*             |  switchconstruct
+*             |  printstmt
+*/
 void programstmt() : {
 }
 {
@@ -92,6 +124,9 @@ void programstmt() : {
     | printstmt()
 }
 
+/**
+* loopconstruct -> REPEAT stmtsequence UNTIL expr
+*/
 void loopconstruct() : {
     int label = getNextNumber();
 }
@@ -100,6 +135,9 @@ void loopconstruct() : {
     stmtsequence() <UNTIL> expr() { System.out.println("\tsifalsovea LBL" + label); }
 }
 
+/**
+* ifconstruct -> IF expr THEN stmtsequence ENDIF
+*/
 void ifconstruct() : {
     int label = getNextNumber();
 }
@@ -110,6 +148,10 @@ void ifconstruct() : {
     { System.out.println("LBL" + label); }
 }
 
+/**
+* switchconstruct -> SWITCH expr ':' listtests ENDSWITCH
+*                 |  SWITCH expr ':' listtests ELSE stmtsequence ENDSWITCH
+*/
 void switchconstruct() : {
     int initialLabel = getNextNumber();
     int currentLabel = -1;
@@ -126,6 +168,13 @@ void switchconstruct() : {
     { System.out.println("LBL" + initialLabel); } )
 }
 
+/**
+* listtests -> test | listtests test
+* Con la eliminación de la recursión izquierda pasa a ser:
+* listtests -> test listtestsP
+* @param firstLabel: Etiqueta inicial
+* @return currentLabel: Etiqueta actual
+*/
 int listtests(int firstLabel) : {
     int currentLabel = -1;
     int isFirstElem = -1;
@@ -137,6 +186,13 @@ int listtests(int firstLabel) : {
     { return currentLabel; }
 }
 
+/**
+* listtestsP -> test listtestsP
+* @param firstLabel: Etiqueta inicial
+* @param currentLabel: Etiqueta actual
+* @param isFirstElem: Indica si es la primera vez que se llega a test
+* @return currentLabel: Etiqueta actual
+*/
 int listtestsP(int firstLabel, int currentLabel, int isFirstElem) : {
 }
 {
@@ -145,6 +201,14 @@ int listtestsP(int firstLabel, int currentLabel, int isFirstElem) : {
     { return currentLabel; }
 }
 
+/**
+* test -> CASE E: stmtsequence
+*       |  RANGE E..E: stmtsequence
+* @param firstLabel: Etiqueta inicial
+* @param currentLabel: Etiqueta actual
+* @param isFirstElem: Indica si es la primera vez que se llega a test
+* @return nextLabel: Etiqueta siguiente
+*/
 int test(int firstLabel, int currentLabel, int isFirstElem) : {
     int nextLabel = -1;
     if (isFirstElem == 0) { System.out.println("LBL" + currentLabel); }
@@ -177,6 +241,9 @@ int test(int firstLabel, int currentLabel, int isFirstElem) : {
     {return nextLabel;}
 }
 
+/**
+* printstmt -> PRINT listexpr
+*/
 void printstmt() : {
     int res = 0;
 }
@@ -185,6 +252,12 @@ void printstmt() : {
     res = listexpr()  { System.out.println("\tprint " + res); }
 }
 
+/**
+* listexpr  -> expr | listexpr ',' expr
+* Con la eliminación de la recursión izquierda pasa a ser:
+* listexpr -> expr listexprP
+* @return res: Número de expresiones
+*/
 int listexpr() : {
     int res;
 }
@@ -194,6 +267,11 @@ int listexpr() : {
     { return res; }
 }
 
+/**
+* listexprP -> ',' expr listexprP
+* @param res: Número de expresiones
+* @return res: Número de expresiones
+*/
 int listexprP(int res) : {
 }
 {
@@ -201,6 +279,12 @@ int listexprP(int res) : {
     { return res; }
 }
 
+/**
+* assigconstruct -> ID '=' expr
+* Se han añadido las reglas para los operadores de incremento y decremento:
+*                 | ID '++' expr
+*                 | ID '--' expr
+*/
 void assigconstruct() : {
     Token tk;
 }
@@ -220,6 +304,9 @@ void assigconstruct() : {
                     System.out.println("\tasigna"); })
 }
 
+/**
+* expr -> multexp ('+' multexp | '-' multexp)*
+*/
 void expr() : {
 }
 {
@@ -227,6 +314,9 @@ void expr() : {
     | <MINUS> multexpr() { System.out.println("\tsub"); } )*
 }
 
+/**
+* multexp -> value ('*' value | '/' value)*
+*/
 void multexpr() : {
 }
 {
@@ -234,6 +324,9 @@ void multexpr() : {
     | <DIVIDE> value() { System.out.println("\tdiv"); } )*
 }
 
+/**
+* value -> '(' expr ')' | ID | NUM
+*/
 void value() : {
    Token tk;
 }
