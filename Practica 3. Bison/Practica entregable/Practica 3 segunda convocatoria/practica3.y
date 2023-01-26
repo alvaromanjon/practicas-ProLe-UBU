@@ -93,7 +93,7 @@ test2: CASE
       { printf("\tduplica\n"); }
       expr 
       { printf("\tmenoroigual\n"); }
-      { printf("\tsifalsovea LBL%d\n", $<num>6 ); }
+      { $<num>$ = $<num>6; printf("\tsifalsovea LBL%d\n", $<num>$); }
       ;
 
 printstmt: PRINT listexpr { printf("\tprint %d\n", $<num>2); };
