@@ -22,7 +22,6 @@ public class MaqPilaAbstrTrad {
    }
 
    static private int nextNumber = -1;
-
    private static int getNextNumber() {
        return ++nextNumber;
    }
@@ -63,11 +62,11 @@ TOKEN : {
 }
 
 MORE: {
-    <StartCOM : "/*"> : COM
+    < StartCOM : "/*" > : COM
 }
 
 <COM>SKIP: {
-    <EndCom : "*/"> : DEFAULT
+    < EndCom : "*/" > : DEFAULT
     | < ~[]>
 }
 
@@ -120,7 +119,6 @@ void switchconstruct() : {
     currentLabel = listtests(initialLabel)
     (<ENDSWITCH>
     { System.out.println("LBL" + currentLabel);
-    System.out.println("\tvea LBL" + initialLabel);
     System.out.println("LBL" + initialLabel); }
     | <ELSE> <COLON>
     { System.out.println("LBL" + currentLabel); }
