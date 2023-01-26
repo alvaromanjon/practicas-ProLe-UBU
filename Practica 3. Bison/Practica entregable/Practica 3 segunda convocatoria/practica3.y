@@ -29,16 +29,22 @@ int getNewLabel() {
 
 stmtsequence: programstmt
               | programstmt stmtsequence;
+
 programstmt: assigconstruct
             | loopconstruct
             | ifconstruct
             | switchconstruct
             | printstmt;
+
 loopconstruct: REPEAT stmtsequence UNTIL expr;
+
 ifconstruct: IF expr THEN stmtsequence ENDIF;
+
 switchconstruct: SWITCH expr COLON listtests ENDSWITCH
                 | SWITCH expr COLON listtests ELSE COLON stmtsequence ENDSWITCH;
+
 listtests: test | listtests test;
+
 test: CASE { printf("\tduplica\n"); }
       expr COLON  { printf("\tigual\n"); }
       stmtsequence
@@ -49,9 +55,9 @@ test: CASE { printf("\tduplica\n"); }
       expr COLON { printf("\tmenoroigual\n"); }
       stmtsequence;
 
-printstmt: PRINT listexpr { printf("\tprint\n"); }; //TODO hacer contador para el print
+printstmt: PRINT listexpr { printf("\tprint %d\n", $<num>2); };
 
-listexpr: expr | listexpr COMMA expr;
+listexpr: expr { $<num>$=1; } | listexpr COMMA expr { $<num>$=$<num>1+1; };
 
 assigconstruct: ID EQUAL { printf("\tvalori %s\n", $1); }
                 expr  { printf("\tasigna\n"); };
