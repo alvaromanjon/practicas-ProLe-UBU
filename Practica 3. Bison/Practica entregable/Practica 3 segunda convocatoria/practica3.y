@@ -25,6 +25,9 @@ int getNewLabel() {
 %token <num> NUM
 %token <id> ID
 
+%left PLUS MINUS
+%left MULTIPLY DIVIDE
+
 %%
 
 stmtsequence: programstmt
@@ -43,26 +46,55 @@ loopconstruct: { int initialLabel = getNewLabel(); $<num>$ = initialLabel; }
               ;
 
 ifconstruct: { int initialLabel = getNewLabel(); $<num>$ = initialLabel; }
-            IF expr { printf("\tigual\n"); 
-                      printf("\tsifalsovea LBL%d\n", $<num>1); }
+            IF expr { printf("\tsifalsovea LBL%d\n", $<num>1); }
             THEN stmtsequence ENDIF
             { printf("LBL%d\n", $<num>1); }
             ;
 
-switchconstruct: SWITCH expr COLON listtests ENDSWITCH
-                | SWITCH expr COLON listtests ELSE COLON stmtsequence ENDSWITCH;
+switchconstruct: SWITCH 
+                expr 
+                COLON 
+                listtests 
+                ENDSWITCH  { printf("LBL%d\n", $<num>4); }
+                | SWITCH 
+                expr 
+                COLON 
+                listtests 
+                ELSE COLON stmtsequence 
+                ENDSWITCH { printf("LBL%d\n", $<num>4); }
+                ;
 
-listtests: test | listtests test;
+listtests: { $<num>$ = getNewLabel(); }
+          test 
+          | listtests test
+          ;
 
-test: CASE { printf("\tduplica\n"); }
-      expr COLON  { printf("\tigual\n"); }
-      stmtsequence
-      | RANGE { printf("\tduplica\n"); }
-      expr  { printf("\tintercambia\n"); 
-              printf("\tmenoroigual\n"); }
-      RANGEDOTS { printf("\tduplica\n"); }
-      expr COLON { printf("\tmenoroigual\n"); }
-      stmtsequence;
+test:
+      test2 stmtsequence { printf("\tvea LBL%d\n", $<num>0); 
+                          $<num>$=$<num>1; printf("LBL%d\n", $<num>$); }
+      | test2 COLON stmtsequence { printf("\tvea LBL%d\n", $<num>0); 
+                                  $<num>$=$<num>1; printf("LBL%d\n", $<num>$); }
+      ;
+
+test2: CASE 
+      { printf("\tduplica\n"); }
+      expr COLON 
+      { printf("\tigual\n"); }
+      { $<num>$=getNewLabel(); printf("\tsifalsovea LBL%d\n", $<num>$ ); }
+      | 
+      RANGE 
+      { printf("\tduplica\n"); }
+      expr 
+      { printf("\tintercambia\n"); }
+      { printf("\tmenoroigual\n"); }
+      { $<num>$=getNewLabel(); 
+      printf("\tsifalsovea LBL%d\n", $<num>$ ); }
+      RANGEDOTS 
+      { printf("\tduplica\n"); }
+      expr 
+      { printf("\tmenoroigual\n"); }
+      { printf("\tsifalsovea LBL%d\n", $<num>6 ); }
+      ;
 
 printstmt: PRINT listexpr { printf("\tprint %d\n", $<num>2); };
 
